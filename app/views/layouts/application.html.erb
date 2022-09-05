@@ -18,6 +18,8 @@
     <% else %>
     <%= link_to "Sign up", new_user_registration_path %> or <%= link_to "sign in", new_user_session_path %>
     <% end %>
+    <br>
+    <%= link_to 'Product Dashboard', dashboard_products_path%>
     <%= yield %>
   </body>
 </html>

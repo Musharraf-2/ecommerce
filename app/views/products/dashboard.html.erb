@@ -1,0 +1,12 @@
+<h1>Product Dashboard</h1>
+<hr>
+<% @products.each do |product| %>
+  <strong>Title: </strong><%= product.title%><br>
+  <%= link_to 'Details', product_path(product)%>
+  <br>
+  <%= link_to 'Edit Product', edit_product_path(product)%>
+  <br>
+  <%= link_to 'Delete', product_path(product) , method: :delete, data: {confirm: "Are you sure?"}%>
+  <hr>
+<% end %>
+<%= link_to 'New Product', new_product_path%>
