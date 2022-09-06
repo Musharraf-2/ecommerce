@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    @product = Product.find(params[:id]).images.purge
     @product = Product.find(params[:id]).destroy
     redirect_to dashboard_products_path
   end
@@ -48,6 +49,6 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    params.require(:product).permit(:title, :description, :price, :quantity)
+    params.require(:product).permit(:title, :description, :price, :quantity, images:[])
   end
 end

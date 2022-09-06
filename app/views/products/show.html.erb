@@ -5,5 +5,7 @@
 <strong>Price: </strong><%= @product.price%><br>
 <strong>Quantity: </strong><%= @product.quantity%><br>
 <strong>Serial Number: </strong><%= @product.serial_number%><br>
-<%= link_to 'Product Dashboard Page', dashboard_products_path%>
+<% @product.images.each do |image| %>
+  <%= image_tag image%>
+<% end %>
 <hr>
