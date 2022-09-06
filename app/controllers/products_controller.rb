@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
       flash[:notice] = 'Product created successfully.'
       redirect_to product_path(@product)
     else
-      flash[:notice] = 'Product creation failed.'
+      flash.now[:notice] = 'Product creation failed.'
       render 'new'
     end
   end
@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
       flash[:notice] = 'Product updated successfully.'
       redirect_to product_path(@product)
     else
-      flash[:notice] = 'Product update failed.'
+      flash.now[:notice] = 'Product update failed.'
       render 'edit'
     end
   end
@@ -43,7 +43,7 @@ class ProductsController < ApplicationController
   end
 
   def dashboard
-    @products = Product.for_current_user(current_user.id)
+    @products = current_user.products
   end
 
   private

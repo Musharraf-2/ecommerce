@@ -1,20 +1,20 @@
-<%= render 'notice'%>
-<%= render 'error', locals: {product: @product} %>
-<%= form_for @product do |f|%>
-<%= f.label :title %><br>
-<%= f.text_field :title %><br>
-<br>
-<%= f.label :description %><br>
-<%= f.text_area :description %><br>
-<br>
-<%= f.label :price %><br>
-<%= f.number_field :price %><br>
-<br>
-<%= f.label :quantity %><br>
-<%= f.number_field :quantity %><br>
-<br>
-<%= f.label :images %><br>
-<%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg' %><br>
-<br>
-<%= f.submit %>
-<%end%>
+<%= render 'notice' %>
+<%= render 'shared/error', object: @product %>
+<%= form_for product do |f| %>
+  <%= f.label :title %><br>
+  <%= f.text_field :title %><br>
+  <br>
+  <%= f.label :description %><br>
+  <%= f.text_area :description %><br>
+  <br>
+  <%= f.label :price %><br>
+  <%= f.number_field :price %><br>
+  <br>
+  <%= f.label :quantity %><br>
+  <%= f.number_field :quantity %><br>
+  <br>
+  <%= f.label :images %><br>
+  <%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg' %><br>
+  <br>
+  <%= f.submit %>
+<% end %>

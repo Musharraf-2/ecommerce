@@ -12,13 +12,11 @@ class Product < ApplicationRecord
   validates :serial_number, uniqueness: true
   validates :images, attached: true, content_type: ['image/png', 'image/jpeg']
 
-  before_validation :unique_serial_number
-
-  scope :for_current_user, ->(user_id) { where('user_id = ?', user_id) }
+  before_validation :generate_unique_serial_number
 
   private
 
-  def unique_serial_number
+  def generate_unique_serial_number
     self.serial_number = SecureRandom.uuid
   end
 end
