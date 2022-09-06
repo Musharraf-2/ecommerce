@@ -1,11 +1,24 @@
+# frozen_string_literal: true
+
 class Product < ApplicationRecord
   belongs_to :user
   has_many_attached :images
 
   validates :title, :description, :price, :quantity, :serial_number, presence: true
-  validates :price, :quantity, numericality: true
+  validates :price, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
   validates :title, length: { in: 2..40 }
   validates :description, length: { in: 5..500 }
   validates :serial_number, uniqueness: true
   validates :images, attached: true, content_type: ['image/png', 'image/jpeg']
+
+  before_validation :unique_serial_number
+
+  scope :for_current_user, ->(user_id) { where('user_id = ?', user_id) }
+
+  private
+
+  def unique_serial_number
+    self.serial_number = SecureRandom.uuid
+  end
 end

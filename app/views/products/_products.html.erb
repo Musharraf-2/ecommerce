@@ -1,0 +1,11 @@
+<hr>
+<% @products.each do |product| %>
+  <strong>Title: </strong><%= product.title%><br>
+  <strong>Price: </strong><%= product.price%><br>
+  <% product.images.each do |image| %>
+    <%= image_tag image%>
+  <% end %>
+  <br>
+  <%= link_to 'Buy', product_path(product) %>
+  <hr>
+<% end %>
