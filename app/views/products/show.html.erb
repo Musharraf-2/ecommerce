@@ -1,0 +1,40 @@
+<div class="container">
+  <h1 class="text-center"><%= @product.title %></h1>
+  <strong>Description: </strong><%= @product.description %><br>
+  <strong>Price: </strong><%= @product.price %> $<br>
+  <strong>Quantity: </strong><%= @product.quantity %><br>
+  <strong>Serial Number: </strong><%= @product.serial_number %><br>
+  <div class="d-flex flex-row justify-content-center">
+    <%= button_to 'Add to Cart', '', :method => :get, :class => "btn-primary p-2 rounded mx-2" %>
+    <%= button_to 'Add to Wishlist', '', :method => :get, :class => "btn-secondary p-2 rounded mx-2" %>
+  </div>
+  <br>
+  <div class="row justify-content-center">
+  <div class="col-4">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner text-center h-50">
+      <div class="carousel-item active">
+        <%= image_tag @product.images[0], :class => "d-block w-100 c-image" %>
+      </div>
+      <% @product.images.each do |image| %>
+        <div class="carousel-item">
+          <%= image_tag image, :class => "d-block w-100 c-image" %>
+        </div>
+      <% end %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  </div>
+  </div>
+</div>
+<br>
+<div class="border border-dark-2 container">
+  <h1 class="text-center">Comments</h1>
+</div>
