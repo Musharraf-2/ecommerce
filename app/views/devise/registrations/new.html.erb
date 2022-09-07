@@ -20,6 +20,11 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password", :class => "form-control" %>
     </div>
     <br>
+    <div class="field form-group">
+      <%= f.label :image %><br />
+       <%= f.file_field :image, accept: 'image/png, image/jpeg', :class => "form-control" %>
+    </div>
+    <br>
     <div class="actions text-center">
       <%= f.submit "Sign up" , :class => "btn-primary p-2 rounded" %>
     </div>

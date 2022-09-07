@@ -7,4 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :products
+  has_one_attached :image
+
+  validates :image, attached: true, content_type: ['image/png', 'image/jpeg']
 end
