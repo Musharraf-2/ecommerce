@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update destroy]
 
   def index
-    @products = Product.all
+    @products = Product.all.page(params[:page]).per(6)
   end
 
   def show; end
@@ -20,9 +20,9 @@ class ProductsController < ApplicationController
     @product = current_user.products.new(product_params)
     if @product.save
       flash[:notice] = 'Product created successfully.'
-      redirect_to product_path(@product)
+      redirect_to dashboard_products_path
     else
-      flash.now[:notice] = 'Product creation failed.'
+      flash.now[:alert] = 'Product creation failed.'
       render 'new'
     end
   end
@@ -30,9 +30,9 @@ class ProductsController < ApplicationController
   def update
     if @product.update(product_params)
       flash[:notice] = 'Product updated successfully.'
-      redirect_to product_path(@product)
+      redirect_to dashboard_products_path
     else
-      flash.now[:notice] = 'Product update failed.'
+      flash.now[:alert] = 'Product update failed.'
       render 'edit'
     end
   end
@@ -43,7 +43,7 @@ class ProductsController < ApplicationController
   end
 
   def dashboard
-    @products = current_user.products
+    @products = current_user.products.page(params[:page]).per(6)
   end
 
   private

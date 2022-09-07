@@ -68,4 +68,5 @@ end
 gem 'active_storage_validations'
 gem 'devise'
 gem 'faker'
+gem 'kaminari'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

@@ -1,20 +1,27 @@
-<%= render 'notice' %>
-<%= render 'shared/error', object: @product %>
 <%= form_for product do |f| %>
-  <%= f.label :title %><br>
-  <%= f.text_field :title %><br>
-  <br>
-  <%= f.label :description %><br>
-  <%= f.text_area :description %><br>
-  <br>
-  <%= f.label :price %><br>
-  <%= f.number_field :price %><br>
-  <br>
-  <%= f.label :quantity %><br>
-  <%= f.number_field :quantity %><br>
-  <br>
-  <%= f.label :images %><br>
-  <%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg' %><br>
-  <br>
-  <%= f.submit %>
+  <div class="form-group">
+    <%= f.label :title %><br>
+    <%= f.text_field :title, :class => "form-control" %><br>
+  </div>
+  <div class="form-group">
+    <%= f.label :description %><br>
+    <%= f.text_area :description, :class => "form-control" %><br>
+  </div>
+  <div class="form-group">
+    <%= f.label :price %><br>
+    <%= f.number_field :price, :class => "form-control" %><br>
+  </div>
+  <div class="form-group">
+    <%= f.label :quantity %><br>
+    <%= f.number_field :quantity, :class => "form-control" %><br>
+  </div>
+  <div class="form-group">
+    <%= f.label :images %><br>
+    <%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg', :class => "form-control" %><br>
+  </div>
+  <div class="text-center">
+    <%= f.submit nil, class: 'btn-primary rounded p-2' %>
+  </div>
 <% end %>
+<br>
+<%= render 'shared/error', object: @product %>

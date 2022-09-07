@@ -1,10 +1,17 @@
-<hr>
-<% products.each do |product| %>
-  <strong>Title: </strong><%= product.title %><br>
-  <%= link_to 'Details', product_path(product) %>
-  <br>
-  <%= link_to 'Edit Product', edit_product_path(product)%>
-  <br>
-  <%= link_to 'Delete', product_path(product) , method: :delete, data: { confirm: "Are you sure?" } %>
-  <hr>
-<% end %>
+<div class="row justify-content-center text-center">
+  <%= paginate products %>
+  <% products.each do |product| %>
+    <div class="col-4 my-3">
+      <div class="card">
+        <%= image_tag product.images[0], :class => "card-image" %>
+        <div class="card-body">
+          <h5 class="card-title"><%= product.title %></h5>
+          <div class="d-flex flex-row justify-content-center">
+            <%= button_to 'Update Product', edit_product_path(product), :method => :get, :class => "btn-warning p-2 rounded mx-2" %>
+            <%= button_to 'Delete', product_path(product), :method => :delete, :class => "btn-danger p-2 rounded mx-2", data: { confirm: "Are you sure?" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

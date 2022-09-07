@@ -1,4 +1,9 @@
-<h1>Product Dashboard</h1>
-<%= render 'notice'%>
-<%= render 'products_dashboard', products: @products %>
-<%= link_to 'New Product', new_product_path %>
+<div class="container">
+  <h1 class="text-center">Product Dashboard</h1>
+  <br>
+  <div class=text-center>
+    <%= button_to 'Add Product', new_product_path, :method => :get, :class => "btn-primary p-2 rounded" %>
+  </div>
+  <br>
+  <%= render 'products_dashboard', products: @products %>
+</div>
