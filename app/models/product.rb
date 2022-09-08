@@ -14,7 +14,7 @@ class Product < ApplicationRecord
 
   before_validation :generate_unique_serial_number
 
-  scope :search, ->(string) { where('title ILIKE ?', "%#{string}%") }
+  scope :search, ->(title) { where('title ILIKE ?', "%#{title.strip.squeeze}%") }
 
   private
 

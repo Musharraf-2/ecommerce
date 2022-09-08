@@ -6,10 +6,10 @@ class ProductsController < ApplicationController
 
   def index
     @products =
-      if params[:q].nil?
+      if params[:query].blank?
         Product.all.page(params[:page]).per(6)
       else
-        Product.search(params[:q]).page(params[:page]).per(6)
+        Product.search(params[:query]).page(params[:page]).per(6)
       end
   end
 
@@ -49,10 +49,6 @@ class ProductsController < ApplicationController
 
   def dashboard
     @products = current_user.products.page(params[:page]).per(6)
-  end
-
-  def search
-    @products = @products.page(params[:page]).per(6)
   end
 
   private
