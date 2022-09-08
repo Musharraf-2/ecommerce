@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   root to: 'products#index'
   resources :products do
     get :dashboard, on: :collection
+    get :search, on: :collection
   end
 end

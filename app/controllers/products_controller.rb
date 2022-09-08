@@ -3,6 +3,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_product, only: %i[show edit update destroy]
+  before_action :set_searched_products, only: %i[search]
 
   def index
     @products = Product.all.page(params[:page]).per(6)
@@ -46,6 +47,10 @@ class ProductsController < ApplicationController
     @products = current_user.products.page(params[:page]).per(6)
   end
 
+  def search
+    @products = @products.page(params[:page]).per(6)
+  end
+
   private
 
   def product_params
@@ -54,5 +59,9 @@ class ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def set_searched_products
+    @products = Product.search(params[:q])
   end
 end
