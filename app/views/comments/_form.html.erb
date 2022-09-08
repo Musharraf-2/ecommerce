@@ -1,0 +1,12 @@
+<div class="container">
+  <%= form_for [@product, @comment], remote: truer do |f| %>
+    <p>
+      <%= f.label :body, :class => "form-group" %><br>
+      <%= f.text_area :body, :class => "form-control" %>
+    </p>
+    <div class="text-center">
+      <%= f.submit nil, :class => "btn-primary p-2 rounded" %>
+    </div>
+  <% end %>
+  <%= render "shared/error", object: @comment %>
+</div>

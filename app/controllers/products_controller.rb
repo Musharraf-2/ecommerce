@@ -8,7 +8,9 @@ class ProductsController < ApplicationController
     @products = Product.all_products(params[:query]).page(params[:page]).per(6)
   end
 
-  def show; end
+  def show
+    @comment = Comment.new
+  end
 
   def new
     @product = Product.new
