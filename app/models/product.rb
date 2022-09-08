@@ -16,7 +16,7 @@ class Product < ApplicationRecord
 
   scope :search, ->(title) { where('title ILIKE ?', "%#{title.strip.squeeze}%") }
 
-  def self.get_products(query)
+  def self.all_products(query)
     if query.blank?
       Product.all
     else

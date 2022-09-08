@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update destroy]
 
   def index
-    @products = Product.get_products(params[:query]).page(params[:page]).per(6)
+    @products = Product.all_products(params[:query]).page(params[:page]).per(6)
   end
 
   def show; end
