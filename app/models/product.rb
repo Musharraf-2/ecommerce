@@ -16,6 +16,14 @@ class Product < ApplicationRecord
 
   scope :search, ->(title) { where('title ILIKE ?', "%#{title.strip.squeeze}%") }
 
+  def self.get_products(query)
+    if query.blank?
+      Product.all
+    else
+      Product.search(query)
+    end
+  end
+
   private
 
   def generate_unique_serial_number
