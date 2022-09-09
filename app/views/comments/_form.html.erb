@@ -5,7 +5,7 @@
       <%= f.text_area :body, :class => "form-control" %>
     </p>
     <div class="text-center">
-      <%= f.submit nil, :class => "btn-primary p-2 rounded" %>
+      <%= f.submit nil, :class => "btn-primary p-2 rounded", :id => "comment_body" %>
     </div>
   <% end %>
   <%= render "shared/error", object: @comment %>

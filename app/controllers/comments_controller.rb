@@ -8,22 +8,15 @@ class CommentsController < ApplicationController
   def create
     @comment = @product.comments.new(comment_params)
     @comment.user_id = current_user.id
-    if @comment.save
-      flash[:notice] = 'Comment added successfully.'
-    else
-      flash[:alert] = 'Comment was not added.'
-    end
-    redirect_to product_path(@product)
+    @comment.save
   end
 
   def edit; end
 
   def update
     if @comment.update(comment_params)
-      flash[:notice] = 'Comment updated successfully.'
       redirect_to product_path(@product)
     else
-      flash.now[:alert] = 'Comment was not updated.'
       render 'edit'
     end
   end
