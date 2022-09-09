@@ -1,5 +1,5 @@
 <div class="container">
-  <%= form_for [@product, @comment], remote: truer do |f| %>
+  <%= form_for [@product, @comment], remote: true do |f| %>
     <p>
       <%= f.label :body, :class => "form-group" %><br>
       <%= f.text_area :body, :class => "form-control" %>
