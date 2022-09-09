@@ -35,6 +35,13 @@
   </div>
 </div>
 <br>
-<div class="border border-dark-2 container">
+<div class="container">
   <h1 class="text-center">Comments</h1>
+  <% if @product.user_id != current_user.id %>
+    <%= render 'comments/form' %>
+  <% end %>
+</div>
+<br>
+<div class="comments container border p-2">
+    <%= render @product.comments %>
 </div>
