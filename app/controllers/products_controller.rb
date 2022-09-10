@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_product, only: %i[show edit update destroy]
   before_action :delete_product_from_session, only: %i[destroy]
+  before_action :initialize_cart, only: %i[index show]
 
   def index
     @products = Product.all_products(params[:query]).page(params[:page]).per(6)
@@ -61,5 +62,9 @@ class ProductsController < ApplicationController
 
   def delete_product_from_session
     session[:cart].delete((params[:id].to_i))
+  end
+
+  def initialize_cart
+    session[:cart] ||= []
   end
 end

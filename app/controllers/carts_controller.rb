@@ -1,23 +1,33 @@
 # frozen_string_literal: true
 
 class CartsController < ApplicationController
+  before_action :initialize_cart, :remove_signed_in_user_products, only: %i[show]
+
   def show
     @products = Product.find(session[:cart])
   end
 
-  def add_to_cart
-    session[:cart] << convert_to_int(params[:id])
+  def update
+    session[:cart] << params[:id].to_i
     redirect_to request.referer
   end
 
-  def remove_from_cart
-    session[:cart].delete(convert_to_int(params[:id]))
+  def destroy
+    session[:cart].delete(params[:id].to_i)
     redirect_to request.referer
   end
 
   private
 
-  def convert_to_int(product_id)
-    product_id.to_i
+  def initialize_cart
+    session[:cart] ||= []
+  end
+
+  def remove_signed_in_user_products
+    return unless user_signed_in?
+
+    Product.where('user_id = ?', current_user.id).pluck(:id).each do |product_id|
+      session[:cart].delete(product_id)
+    end
   end
 end

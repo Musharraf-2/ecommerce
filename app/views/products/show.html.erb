@@ -7,11 +7,11 @@
   <div class="d-flex flex-row justify-content-center">
     <% if (user_signed_in? && current_user.id != @product.user_id) || (!user_signed_in?) %>
       <% if session[:cart].include? @product.id %>
-        <%= button_to 'Remove from Cart', remove_from_cart_path(@product.id), :method => :get, :class => "btn-danger p-2 rounded mx-2" %>
+        <%= button_to 'Remove from Cart', cart_path(id: @product.id), method: :delete, class: "btn-danger p-2 rounded mx-2" %>
       <% else %>
-        <%= button_to 'Add to Cart', add_to_cart_path(@product.id), :method => :get, :class => "btn-primary p-2 rounded mx-2" %>
+        <%= button_to 'Add to Cart', cart_path(id: @product.id), method: :put, class: "btn-primary p-2 rounded mx-2" %>
       <% end %>
-      <%= button_to 'Add to Wishlist', '', :method => :get, :class => "btn-secondary p-2 rounded mx-2" %>
+      <%= button_to 'Add to Wishlist', '', method: :get, class: "btn-secondary p-2 rounded mx-2" %>
     <% end %>
   </div>
   <br>
@@ -20,11 +20,11 @@
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner text-center h-50">
       <div class="carousel-item active">
-        <%= image_tag @product.images[0], :class => "d-block w-100 c-image" %>
+        <%= image_tag @product.images[0], class: "d-block w-100 c-image" %>
       </div>
       <% @product.images.each do |image| %>
         <div class="carousel-item">
-          <%= image_tag image, :class => "d-block w-100 c-image" %>
+          <%= image_tag image, class: "d-block w-100 c-image" %>
         </div>
       <% end %>
     </div>
