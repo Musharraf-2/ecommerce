@@ -1,0 +1,7 @@
+<h3>Hey <%= @email %>, price changed for product: <%= @product.title %> in your wishlist.</h3>
+<div style="border: 1px solid black; text-align: center; width: 300px; border-radius: 12px;">
+  <%= image_tag attachments['product.jpeg'].url, style: "height: 400px; width: 300px; border-radius: 12px" %>
+  <p><strong>Title: </strong><%= @product.title %></p>
+  <p><strong>New Price: </strong><%= @product.price %> $</p>
+  <p><strong>Old Price: </strong><%= @old_price %> $</p>
+</div>

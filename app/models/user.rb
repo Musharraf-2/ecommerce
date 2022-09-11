@@ -6,9 +6,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :products
+  has_many :products, dependent: :destroy
   has_one_attached :image
   has_many :comments, dependent: :destroy
+  has_many :wishlist_products, dependent: :destroy
 
   validates :image, attached: true, content_type: ['image/png', 'image/jpeg']
 end

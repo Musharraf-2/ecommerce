@@ -5,6 +5,9 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update destroy]
   before_action :delete_product_from_session, only: %i[destroy]
   before_action :initialize_cart, only: %i[index show]
+  before_action :set_old_price, only: %i[update]
+  after_action :send_email, only: %i[update]
+  after_action :find_emails, only: %i[update]
 
   def index
     @products = Product.all_products(params[:query]).page(params[:page]).per(6)
@@ -66,5 +69,21 @@ class ProductsController < ApplicationController
 
   def initialize_cart
     session[:cart] ||= []
+  end
+
+  def send_email
+    return unless @product.price != @old_price
+
+    @emails.each do |email|
+      UserMailer.with(email: email, product: @product, old_price: @old_price).price_changed_email.deliver_later
+    end
+  end
+
+  def set_old_price
+    @old_price = @product.price
+  end
+
+  def find_emails
+    @emails = User.joins(:wishlist_products).where('wishlist_products.product_id': @product.id).pluck(:email)
   end
 end

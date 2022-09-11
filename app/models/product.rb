@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   belongs_to :user
   has_many_attached :images
   has_many :comments, dependent: :destroy
+  has_many :wishlist_products, dependent: :destroy
 
   validates :title, :description, :price, :quantity, :serial_number, presence: true
   validates :price, numericality: { greater_than: 0 }
