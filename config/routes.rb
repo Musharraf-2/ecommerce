@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root to: 'products#index'
   resource :cart
   resource :wishlist
+  resource :saleline_item
   resources :products do
     get :dashboard, on: :collection
     resources :comments
