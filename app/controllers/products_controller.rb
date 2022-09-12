@@ -3,9 +3,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_product, only: %i[show edit update destroy]
-  before_action :delete_product_from_session, only: %i[destroy]
   before_action :initialize_cart, only: %i[index show]
-  before_action :set_old_price, only: %i[update]
   after_action :send_email, only: %i[update]
   after_action :find_emails, only: %i[update]
 
@@ -35,6 +33,7 @@ class ProductsController < ApplicationController
   end
 
   def update
+    @old_price = @product.price
     if @product.update(product_params)
       flash[:notice] = 'Product updated successfully.'
       redirect_to dashboard_products_path
@@ -46,6 +45,7 @@ class ProductsController < ApplicationController
 
   def destroy
     @product.destroy
+    session[:cart].delete((params[:id].to_i))
     redirect_to dashboard_products_path
   end
 
@@ -63,10 +63,6 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
   end
 
-  def delete_product_from_session
-    session[:cart].delete((params[:id].to_i))
-  end
-
   def initialize_cart
     session[:cart] ||= []
   end
@@ -77,10 +73,6 @@ class ProductsController < ApplicationController
     @emails.each do |email|
       UserMailer.with(email: email, product: @product, old_price: @old_price).price_changed_email.deliver_later
     end
-  end
-
-  def set_old_price
-    @old_price = @product.price
   end
 
   def find_emails

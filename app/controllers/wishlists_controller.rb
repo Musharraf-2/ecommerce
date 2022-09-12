@@ -2,10 +2,12 @@
 
 class WishlistsController < ApplicationController
   before_action :authenticate_user!, only: %i[show update]
-  before_action :set_user, :set_products, only: %i[show]
   before_action :find_wishlist_product, only: %i[update destroy]
 
-  def show; end
+  def show
+    user = User.find(current_user.id)
+    @products = Product.find(user.wishlist_products.pluck(:product_id))
+  end
 
   def update
     if !@wishlist_product
@@ -23,14 +25,6 @@ class WishlistsController < ApplicationController
   end
 
   private
-
-  def set_user
-    @user = User.find(current_user.id)
-  end
-
-  def set_products
-    @products = Product.find(@user.wishlist_products.pluck(:product_id))
-  end
 
   def find_wishlist_product
     @wishlist_product = WishlistProduct.find_by(user_id: current_user.id, product_id: params[:id])
