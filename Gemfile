@@ -69,4 +69,5 @@ gem 'active_storage_validations'
 gem 'devise'
 gem 'faker'
 gem 'kaminari'
+gem 'paypal-checkout-sdk'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

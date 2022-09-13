@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="text-center">Order Details</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <% @saleline_items.each do |saleline_item| %>
+      <tr>
+        <td><%= saleline_item.title %></td>
+        <td><%= saleline_item.quantity %></td>
+        <td><%= saleline_item.price * saleline_item.quantity %>$</td>
+    </tr>
+    <%end %>
+    <tr>
+      <td></td>
+      <td style="text-align: right;"><b>Total Amount:</b></td>
+      <td><b><%= @total_amount %> $</b></td>
+    <tr>
+  </table>
+  <% if !Order.exists?(user_id: current_user.id) %>
+    <h4 class="text-center">You are getting 10% discount for your first order. Your amount now payable is: <%= @total_amount %> $<h4>
+  <% end %>
+  <br>
+  <% if @saleline_items.any? %>
+    <div id="paypal-button-container" class="text-center"></div>
+  <% end %>
+</div>

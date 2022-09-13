@@ -20,7 +20,7 @@
   <br>
   <% if session[:cart].any? %>
     <div class="text-center">
-      <%= button_to 'Proceed to Checkout', '', class: "btn-warning p-2 rounded", method: :get %>
+      <%= button_to 'Proceed to Checkout', order_path, class: "btn-warning p-2 rounded", method: :get %>
     </div>
   <% end %>
   <br>

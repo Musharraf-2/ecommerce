@@ -8,6 +8,12 @@ class UserMailer < ApplicationMailer
     mail(to: @email, subject: 'Price changed for a product in your wishlist!')
   end
 
+  def sold_product_email
+    @email = params[:email]
+    @ordered_products = params[:ordered_products]
+    mail(to: @email, subject: "#{@email} bought a product from your catalouge!")
+  end
+
   private
 
   def set_email
