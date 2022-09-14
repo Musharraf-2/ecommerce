@@ -1,0 +1,17 @@
+<h1>Ordered Products<h1>
+<table>
+  <tr style="background-color: grey;">
+    <td>Title</td>
+    <td>Quantity</td>
+    <td>Price</td>
+  </tr>
+  <br>
+  <% @ordered_products.each do |ordered_product| %>
+    <tr>
+      <td><%= ordered_product[0] %></td>
+      <td><%= ordered_product[1] %></td>
+      <td><%= ordered_product[2] %></td>
+    </tr>
+    <br>
+  <% end %>
+</table>

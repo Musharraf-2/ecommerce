@@ -5,8 +5,14 @@
   <strong>Quantity: </strong><%= @product.quantity %><br>
   <strong>Serial Number: </strong><%= @product.serial_number %><br>
   <div class="d-flex flex-row justify-content-center">
-    <%= button_to 'Add to Cart', '', :method => :get, :class => "btn-primary p-2 rounded mx-2" %>
-    <%= button_to 'Add to Wishlist', '', :method => :get, :class => "btn-secondary p-2 rounded mx-2" %>
+    <% if (user_signed_in? && current_user.id != @product.user_id) || (!user_signed_in?) %>
+      <% if session[:cart].include? @product.id %>
+        <%= button_to 'Remove from Cart', saleline_item_path(id: @product.id), method: :delete, class: "btn-danger p-2 rounded mx-2" %>
+      <% else %>
+        <%= button_to 'Add to Cart', saleline_item_path(id: @product.id), method: :create, class: "btn-primary p-2 rounded mx-2" %>
+      <% end %>
+       <%= button_to 'Add to Wishlist', wishlist_path(id: @product.id), method: :put, class: "btn-secondary p-2 rounded mx-2" %>
+      <% end %>
   </div>
   <br>
   <div class="row justify-content-center">
@@ -14,11 +20,11 @@
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner text-center h-50">
       <div class="carousel-item active">
-        <%= image_tag @product.images[0], :class => "d-block w-100 c-image" %>
+        <%= image_tag @product.images[0], class: "d-block w-100 c-image" %>
       </div>
       <% @product.images.each do |image| %>
         <div class="carousel-item">
-          <%= image_tag image, :class => "d-block w-100 c-image" %>
+          <%= image_tag image, class: "d-block w-100 c-image" %>
         </div>
       <% end %>
     </div>
@@ -37,8 +43,10 @@
 <br>
 <div class="container">
   <h1 class="text-center">Comments</h1>
-  <% if @product.user_id != current_user.id %>
-    <%= render 'comments/form' %>
+  <% if user_signed_in? %>
+    <% if @product.user_id != current_user.id %>
+      <%= render 'comments/form' %>
+    <% end %>
   <% end %>
 </div>
 <br>

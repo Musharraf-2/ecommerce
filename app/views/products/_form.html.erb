@@ -1,23 +1,23 @@
 <%= form_for product do |f| %>
   <div class="form-group">
     <%= f.label :title %><br>
-    <%= f.text_field :title, :class => "form-control" %><br>
+    <%= f.text_field :title, class: "form-control" %><br>
   </div>
   <div class="form-group">
     <%= f.label :description %><br>
-    <%= f.text_area :description, :class => "form-control" %><br>
+    <%= f.text_area :description, class: "form-control" %><br>
   </div>
   <div class="form-group">
     <%= f.label :price %><br>
-    <%= f.number_field :price, :class => "form-control" %><br>
+    <%= f.number_field :price, class: "form-control" %><br>
   </div>
   <div class="form-group">
     <%= f.label :quantity %><br>
-    <%= f.number_field :quantity, :class => "form-control" %><br>
+    <%= f.number_field :quantity, class: "form-control" %><br>
   </div>
   <div class="form-group">
     <%= f.label :images %><br>
-    <%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg', :class => "form-control" %><br>
+    <%= f.file_field :images, multiple: true, accept: 'image/png, image/jpeg', class: "form-control" %><br>
   </div>
   <div class="text-center">
     <%= f.submit nil, class: 'btn-primary rounded p-2' %>

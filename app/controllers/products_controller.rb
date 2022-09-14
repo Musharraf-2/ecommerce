@@ -3,6 +3,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_product, only: %i[show edit update destroy]
+  before_action :initialize_cart, only: %i[index show]
 
   def index
     @products = Product.all_products(params[:query]).page(params[:page]).per(6)
@@ -30,8 +31,10 @@ class ProductsController < ApplicationController
   end
 
   def update
+    @old_price = @product.price
     if @product.update(product_params)
       flash[:notice] = 'Product updated successfully.'
+      @product.send_emails(@old_price)
       redirect_to dashboard_products_path
     else
       flash.now[:alert] = 'Product update failed.'
@@ -41,6 +44,7 @@ class ProductsController < ApplicationController
 
   def destroy
     @product.destroy
+    session[:cart].delete((params[:id].to_i))
     redirect_to dashboard_products_path
   end
 
@@ -56,5 +60,9 @@ class ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def initialize_cart
+    session[:cart] ||= []
   end
 end
