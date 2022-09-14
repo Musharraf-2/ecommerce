@@ -41,20 +41,20 @@ class OrdersController < ApplicationController
   private
 
   def paypal_init
-    client_id = 'AR-LlsQt-nlCNqvmOJM7AueCpe9pkyoSZyEyN_oWIcEj-ItW6SwWinPbTVlHJIdK1oMsQokIalY6cOOJ'
-    client_secret = 'ECH3xnOhcoMY1C9C_KCy2TRbdolETVUjntO9WEq2_YCXZAkeOqYAA7zErKNlaxWAbCGGaG4FqCkOsVfP'
+    client_id = Rails.application.credentials.dig(:paypal, :id)
+    client_secret = Rails.application.credentials.dig(:paypal, :secret)
     environment = PayPal::SandboxEnvironment.new client_id, client_secret
     @client = PayPal::PayPalHttpClient.new environment
   end
 
   def save_ordered_products
     order = Order.find_by(token: params[:order_id])
-    saleline_items = SalelineItem.where(user_id: current_user.id)
+    saleline_items = SalelineItem.for_current_user(current_user.id)
     saleline_items.each do |saleline_item|
       order.ordered_products.create(title: saleline_item.title, quantity: saleline_item.quantity,
                                     price: saleline_item.price)
-      saleline_items.each(&:destroy)
     end
+    SalelineItem.destroy_saleline_items_for_session(session[:cart])
     session.delete(:cart)
   end
 
