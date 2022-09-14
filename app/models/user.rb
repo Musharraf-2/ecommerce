@@ -12,4 +12,8 @@ class User < ApplicationRecord
   has_many :wishlist_products, dependent: :destroy
 
   validates :image, attached: true, content_type: ['image/png', 'image/jpeg']
+
+  scope :users_for_email, lambda { |product_id|
+                            User.joins(:wishlist_products).where('wishlist_products.product_id': product_id)
+                          }
 end

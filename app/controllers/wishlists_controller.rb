@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class WishlistsController < ApplicationController
-  before_action :authenticate_user!, only: %i[show update]
+  before_action :authenticate_user!, only: %i[show update destroy]
   before_action :find_wishlist_product, only: %i[update destroy]
 
   def show
-    user = User.find(current_user.id)
-    @products = Product.find(user.wishlist_products.pluck(:product_id))
+    @products = Product.find(current_user.wishlist_products.pluck(:product_id))
   end
 
   def update

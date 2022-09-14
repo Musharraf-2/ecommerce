@@ -17,12 +17,21 @@ class Product < ApplicationRecord
   before_validation :generate_unique_serial_number
 
   scope :search, ->(title) { where('title ILIKE ?', "%#{title.strip.squeeze(' ')}%") }
+  scope :sellers_for_mail, ->(user_id) { where(id: SalelineItem.where(user_id: user_id).pluck(:product_id)).distinct }
 
   def self.all_products(query)
     if query.blank?
       Product.all
     else
       Product.search(query)
+    end
+  end
+
+  def send_emails(old_price)
+    return unless price != old_price
+
+    User.users_for_email(id).pluck(:email).each do |email|
+      UserMailer.with(email: email, product: self, old_price: old_price).price_changed_email.deliver_later
     end
   end
 

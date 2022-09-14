@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  before_action :paypal_init
-  before_action :authenticate_user!, :map_products_to_signed_in_user, only: %i[show]
-  before_action :calculate_total_amount, only: %i[show create]
+  skip_before_action :verify_authenticity_token, only: %i[create capture_order]
+  before_action :paypal_init, only: %i[create capture_order]
+  before_action :authenticate_user!, only: %i[show create capture_order]
   after_action :save_ordered_products, :send_email_to_seller, only: %i[capture_order]
 
-  def show; end
+  def show
+    @saleline_items = SalelineItem.map_products_to_signed_in_user(current_user.id)
+    @total_amount = SalelineItem.calculate_total_amount(current_user.id)
+  end
 
   def create
+    total_amount = SalelineItem.calculate_total_amount(current_user.id)
     request = PayPalCheckoutSdk::Orders::OrdersCreateRequest.new
     request.request_body({
                            intent: 'CAPTURE',
@@ -17,13 +20,13 @@ class OrdersController < ApplicationController
                              {
                                amount: {
                                  currency_code: 'USD',
-                                 value: @total_amount.to_s
+                                 value: total_amount.to_s
                                }
                              }
                            ]
                          })
     response = @client.execute request
-    order = Order.new(user_id: current_user.id, amount: @total_amount, token: response.result.id)
+    order = Order.new(user_id: current_user.id, amount: total_amount, token: response.result.id)
     render json: { token: response.result.id }, status: :ok if order.save
   end
 
@@ -37,27 +40,11 @@ class OrdersController < ApplicationController
 
   private
 
-  def map_products_to_signed_in_user
-    @saleline_items = SalelineItem.where('product_id != ?', User.find(current_user.id).products.ids)
-    @saleline_items.each do |saleline_item|
-      saleline_item.update(user_id: current_user.id)
-    end
-  end
-
   def paypal_init
     client_id = 'AR-LlsQt-nlCNqvmOJM7AueCpe9pkyoSZyEyN_oWIcEj-ItW6SwWinPbTVlHJIdK1oMsQokIalY6cOOJ'
     client_secret = 'ECH3xnOhcoMY1C9C_KCy2TRbdolETVUjntO9WEq2_YCXZAkeOqYAA7zErKNlaxWAbCGGaG4FqCkOsVfP'
     environment = PayPal::SandboxEnvironment.new client_id, client_secret
     @client = PayPal::PayPalHttpClient.new environment
-  end
-
-  def calculate_total_amount
-    @total_amount = 0
-    saleline_items = SalelineItem.where(user_id: current_user.id)
-    saleline_items.each do |saleline_item|
-      @total_amount += saleline_item.quantity * saleline_item.price
-    end
-    @total_amount -= @total_amount * 0.1 unless Order.exists?(user_id: current_user.id)
   end
 
   def save_ordered_products
@@ -72,14 +59,11 @@ class OrdersController < ApplicationController
   end
 
   def send_email_to_seller
-    user_ids = Product.where(id: SalelineItem.where(user_id: current_user.id).pluck(:product_id)).distinct.pluck(:user_id)
+    user_ids = Product.sellers_for_mail(current_user.id).pluck(:user_id)
     users = User.where(id: user_ids)
+    sold_products = SalelineItem.for_current_user(current_user.id).pluck(:title, :quantity, :price)
     users.each do |user|
-      UserMailer.with(email: user.email, ordered_products: find_ordered_products).sold_product_email.deliver_later
+      UserMailer.with(email: user.email, ordered_products: sold_products).sold_product_email.deliver_later
     end
-  end
-
-  def find_ordered_products
-    SalelineItem.where(user_id: current_user.id).pluck(:title, :quantity, :price)
   end
 end
