@@ -7,8 +7,8 @@ class Product < ApplicationRecord
   has_many :wishlist_products, dependent: :destroy
 
   validates :title, :description, :price, :quantity, :serial_number, presence: true
-  validates :price, numericality: { greater_than: 0 }
-  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
+  validates :price, numericality: { greater_than: 0, less_than: 100_000 }
+  validates :quantity, numericality: { greater_than_or_equal_to: 0, less_than: 501 }
   validates :title, length: { in: 2..40 }
   validates :description, length: { in: 5..500 }
   validates :serial_number, uniqueness: true
