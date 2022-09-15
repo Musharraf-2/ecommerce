@@ -33,9 +33,9 @@ class OrdersController < ApplicationController
   def capture_order
     request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest.new params[:order_id]
     response = @client.execute request
-    order = Order.find_by token: params[:order_id]
-    order.paid_status = response.result.status == 'COMPLETED'
-    render json: { status: response.result.status }, status: :ok if order.save
+    @order = Order.find_by token: params[:order_id]
+    @order.paid_status = response.result.status == 'COMPLETED'
+    render json: { status: response.result.status }, status: :ok if @order.save
   end
 
   private
@@ -48,11 +48,10 @@ class OrdersController < ApplicationController
   end
 
   def save_ordered_products
-    order = Order.find_by(token: params[:order_id])
     saleline_items = SalelineItem.for_current_user(current_user.id)
     saleline_items.each do |saleline_item|
-      order.ordered_products.create(title: saleline_item.title, quantity: saleline_item.quantity,
-                                    price: saleline_item.price)
+      @order.ordered_products.create(title: saleline_item.title, quantity: saleline_item.quantity,
+                                     price: saleline_item.price)
     end
     SalelineItem.destroy_saleline_items_for_session(session[:cart])
     session.delete(:cart)
