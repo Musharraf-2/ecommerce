@@ -9,7 +9,7 @@ class SalelineItem < ApplicationRecord
   scope :for_current_user, ->(user_id) { where(user_id: user_id) }
 
   def self.map_products_to_signed_in_user(user_id)
-    saleline_items = SalelineItem.where('product_id != ?', User.find(user_id).products.ids)
+    saleline_items = SalelineItem.where.not(product_id: User.find(user_id).products.ids)
     saleline_items.each do |saleline_item|
       saleline_item.update(user_id: user_id)
     end

@@ -10,9 +10,12 @@ class CommentsController < ApplicationController
     @comment.save
   end
 
-  def edit; end
+  def edit
+    authorize @comment
+  end
 
   def update
+    authorize @comment
     if @comment.update(comment_params)
       redirect_to product_path(@product)
     else
@@ -21,6 +24,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    authorize @comment
     @comment.destroy
     redirect_to product_path(@product)
   end

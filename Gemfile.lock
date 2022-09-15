@@ -141,6 +141,8 @@ GEM
     pg (1.4.3)
     public_suffix (5.0.0)
     puma (3.12.6)
+    pundit (2.2.0)
+      activesupport (>= 3.0.0)
     racc (1.6.0)
     rack (2.2.4)
     rack-test (2.0.2)
@@ -274,6 +276,7 @@ DEPENDENCIES
   paypal-checkout-sdk
   pg (>= 0.18, < 2.0)
   puma (~> 3.11)
+  pundit
   rails (~> 5.2.8, >= 5.2.8.1)
   rubocop
   rubocop-minitest
