@@ -67,6 +67,7 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'active_storage_validations'
+gem 'cloudinary'
 gem 'devise'
 gem 'faker'
 gem 'kaminari'

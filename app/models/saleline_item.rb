@@ -3,7 +3,7 @@
 class SalelineItem < ApplicationRecord
   validates :title, :price, :quantity, presence: true
   validates :price, numericality: { greater_than: 0 }
-  validates :quantity, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { greater_than: 0, less_than: 501 }
   validates :title, length: { in: 2..40 }
 
   scope :for_current_user, ->(user_id) { where(user_id: user_id) }

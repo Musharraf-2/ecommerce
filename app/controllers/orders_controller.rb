@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[create capture_order]
   before_action :paypal_init, only: %i[create capture_order]
   before_action :authenticate_user!, only: %i[show create capture_order]
-  after_action :save_ordered_products, :send_email_to_seller, only: %i[capture_order]
+  after_action :save_ordered_products, :send_email_to_seller, :update_quantities, only: %i[capture_order]
 
   def show
     @saleline_items = SalelineItem.map_products_to_signed_in_user(current_user.id)
@@ -63,6 +63,15 @@ class OrdersController < ApplicationController
     sold_products = SalelineItem.for_current_user(current_user.id).pluck(:title, :quantity, :price)
     users.each do |user|
       UserMailer.with(email: user.email, ordered_products: sold_products).sold_product_email.deliver_later
+    end
+  end
+
+  def update_quantities
+    saleline_items = SalelineItem.for_current_user(current_user.id)
+    saleline_items.each do |saleline_item|
+      product = Product.find(saleline_item.product_id)
+      product.quantity = product.quantity - saleline_item.quantity
+      product.save
     end
   end
 end
