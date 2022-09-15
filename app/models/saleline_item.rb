@@ -24,4 +24,9 @@ class SalelineItem < ApplicationRecord
     total_amount -= (total_amount * 0.1) unless Order.exists?(user_id: user_id)
     total_amount
   end
+
+  def self.destroy_saleline_items_for_session(session)
+    saleline_items = SalelineItem.where(product_id: session)
+    saleline_items.each(&:destroy)
+  end
 end
