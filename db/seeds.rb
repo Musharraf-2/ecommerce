@@ -15,7 +15,7 @@
 end
 
 3.times do
-  product = Product.new(title: Faker::Commerce.unique.product_name, price: Faker::Commerce.unique.price,
+  product = Product.new(title: Faker::Commerce.unique.product_name, price: Faker::Number.unique.number(digits: 3),
                         description: Faker::Lorem.unique.sentence, quantity: Faker::Number.unique.number(digits: 3),
                         user_id: 1, serial_number: Faker::Crypto.unique.md5)
   product.images.attach(io: File.open(Rails.root.join('app/assets/images/car.jpeg')), filename: 'car.jepg')
@@ -23,7 +23,7 @@ end
 end
 
 3.times do
-  product = Product.new(title: Faker::Commerce.unique.product_name, price: Faker::Commerce.unique.price,
+  product = Product.new(title: Faker::Commerce.unique.product_name, price: Faker::Number.unique.number(digits: 3),
                         description: Faker::Lorem.unique.sentence, quantity: Faker::Number.unique.number(digits: 3),
                         user_id: 2, serial_number: Faker::Crypto.unique.md5)
   product.images.attach(io: File.open(Rails.root.join('app/assets/images/car.jpeg')), filename: 'car.jepg')

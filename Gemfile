@@ -70,4 +70,5 @@ gem 'devise'
 gem 'faker'
 gem 'kaminari'
 gem 'paypal-checkout-sdk'
+gem 'pundit'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

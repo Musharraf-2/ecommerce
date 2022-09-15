@@ -17,7 +17,9 @@ class ProductsController < ApplicationController
     @product = Product.new
   end
 
-  def edit; end
+  def edit
+    authorize @product
+  end
 
   def create
     @product = current_user.products.new(product_params)
@@ -31,6 +33,7 @@ class ProductsController < ApplicationController
   end
 
   def update
+    authorize @product
     @old_price = @product.price
     if @product.update(product_params)
       flash[:notice] = 'Product updated successfully.'
@@ -43,6 +46,7 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    authorize @product
     @product.destroy
     session[:cart].delete((params[:id].to_i))
     redirect_to dashboard_products_path
