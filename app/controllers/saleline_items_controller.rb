@@ -14,7 +14,7 @@ class SalelineItemsController < ApplicationController
   def update
     s = SalelineItem.find(saleline_item_params['saleline_item_id'].to_i)
     s.update(quantity: saleline_item_params['quantity'].to_i)
-    flash['notice'] = 'Quantity updated successfully.'
+    flash['notice'] = I18n.t('saleline_item.quantity_updated')
     redirect_to request.referer
   end
 

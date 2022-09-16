@@ -16,12 +16,12 @@ class ApplicationController < ActionController::Base
   private
 
   def user_not_authorized
-    flash[:alert] = 'You are not authorized to to perform this action.'
+    flash[:alert] = I18n.t('pundit.user_not_authorized')
     redirect_to root_path
   end
 
   def record_not_found
-    flash[:alert] = 'The record you are asking does not exists.'
+    flash[:alert] = I18n.t('pundit.record_not_found')
     redirect_to root_path
   end
 end
