@@ -1,0 +1,16 @@
+ <% saleline_items.each do |saleline_item| %>
+    <h2 class="m-2"><%= saleline_item.title %></h2>
+      <div class="row">
+        <div class="col-10">
+          <%= form_for saleline_item, method: :patch do |f|  %>
+            <%= f.hidden_field :saleline_item_id, value: saleline_item.id %>
+            <%= f.number_field :quantity, value: saleline_item.quantity, min: "1", max: Product.find(saleline_item.product_id).quantity.to_s, class: "form-control"  %>
+            <br>
+            <%= f.submit "Update Quantity", class: "btn-warning p-2 rounded"%>
+          <% end %>
+        </div>
+        <div class="col-2">
+          <%= button_to 'Remove from Cart', saleline_item_path(id: saleline_item.product_id), method: :delete, class: "btn-danger p-2 rounded mx-2" %>
+        </div>
+      </div>
+  <% end %>

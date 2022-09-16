@@ -4,27 +4,24 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!, only: %i[create edit update destroy]
   before_action :set_product, only: %i[create edit update destroy]
   before_action :set_comment, only: %i[edit update destroy]
+  before_action :aurthorize_comment, only: %i[edit update destroy]
 
   def create
     @comment = @product.comments.new(comment_params)
     @comment.save
   end
 
-  def edit
-    authorize @comment
-  end
+  def edit; end
 
   def update
-    authorize @comment
     if @comment.update(comment_params)
       redirect_to product_path(@product)
     else
-      render 'edit'
+      render :edit
     end
   end
 
   def destroy
-    authorize @comment
     @comment.destroy
     redirect_to product_path(@product)
   end
@@ -41,5 +38,9 @@ class CommentsController < ApplicationController
 
   def set_comment
     @comment = @product.comments.find(params[:id])
+  end
+
+  def aurthorize_comment
+    authorize @comment
   end
 end

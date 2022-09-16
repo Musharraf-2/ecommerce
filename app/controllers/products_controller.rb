@@ -3,6 +3,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_product, only: %i[show edit update destroy]
+  before_action :authorize_product, only: %i[edit update destroy]
   before_action :initialize_cart, only: %i[index show]
 
   def index
@@ -17,36 +18,28 @@ class ProductsController < ApplicationController
     @product = Product.new
   end
 
-  def edit
-    authorize @product
-  end
+  def edit; end
 
   def create
     @product = current_user.products.new(product_params)
     if @product.save
-      flash[:notice] = 'Product created successfully.'
-      redirect_to dashboard_products_path
+      redirect_to dashboard_products_path, notice: I18n.t('product.created')
     else
-      flash.now[:alert] = 'Product creation failed.'
-      render 'new'
+      render :new, alert: I18n.t('product.creation_failed')
     end
   end
 
   def update
-    authorize @product
     @old_price = @product.price
     if @product.update(product_params)
-      flash[:notice] = 'Product updated successfully.'
       @product.send_emails(@old_price)
-      redirect_to dashboard_products_path
+      redirect_to dashboard_products_path, notice: I18n.t('product.update')
     else
-      flash.now[:alert] = 'Product update failed.'
-      render 'edit'
+      render :edit, alert: I18n.t('product.update_failed')
     end
   end
 
   def destroy
-    authorize @product
     @product.destroy
     session[:cart].delete((params[:id].to_i))
     redirect_to dashboard_products_path
@@ -68,5 +61,9 @@ class ProductsController < ApplicationController
 
   def initialize_cart
     session[:cart] ||= []
+  end
+
+  def authorize_product
+    authorize @product
   end
 end

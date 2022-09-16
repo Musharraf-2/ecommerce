@@ -6,12 +6,12 @@ Rails.application.routes.draw do
   root to: 'products#index'
   post :create, to: 'orders#create'
   post :capture_order, to: 'orders#capture_order'
-  resource :cart
-  resource :wishlist
-  resource :saleline_item
-  resource :order
+  resource :cart, only: %i[show]
+  resource :wishlist, only: %i[show update destroy]
+  resource :saleline_item, only: %i[create update destroy]
+  resource :order, only: %i[show]
   resources :products do
     get :dashboard, on: :collection
-    resources :comments
+    resources :comments, only: %i[create edit update destroy]
   end
 end

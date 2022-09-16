@@ -5,17 +5,16 @@ class WishlistsController < ApplicationController
   before_action :find_wishlist_product, only: %i[update destroy]
 
   def show
-    @products = Product.find(current_user.wishlist_products.pluck(:product_id))
+    @wishlist_products = Product.find(current_user.wishlist_products.pluck(:product_id))
   end
 
   def update
     if !@wishlist_product
       WishlistProduct.create(user_id: current_user.id, product_id: params[:id])
-      flash[:notice] = 'Product added to wishlist.'
+      redirect_to request.referer, notice: I18n.t('wishlist.product_added')
     else
-      flash[:alert] = 'Product already in wishlist.'
+      redirect_to request.referer, alert: I18n.t('wishlist.product_exists')
     end
-    redirect_to request.referer
   end
 
   def destroy

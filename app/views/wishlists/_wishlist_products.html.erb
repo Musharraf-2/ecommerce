@@ -1,0 +1,11 @@
+<% @wishlist_products.each do |wishlist_product| %>
+      <div class="row">
+        <div class="col-6">
+          <%= wishlist_product.title %>
+        </div>
+        <div class="col-6">
+          <%= button_to 'Remove from Wishlist', wishlist_path(id: wishlist_product.id), method: :delete, class: "btn-danger p-2 rounded mx-2" %>
+        </div>
+      </div>
+      <br>
+    <% end %>

@@ -30,4 +30,16 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  pundit:
+    user_not_authorized: 'You are not authorized to to perform this action.'
+    record_not_found: 'The record you are asking does not exists.'
+  product:
+    created: 'Product created successfully.'
+    creation_failed: 'Product creation failed.'
+    update: Product updated successfully.'
+    update_failed: 'Product update failed.'
+  saleline_item:
+    quantity_updated: 'Quantity updated successfully.'
+  wishlist:
+    product_added:  'Product added to wishlist.'
+    product_exists: 'Product already in wishlist.'
