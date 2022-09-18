@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
 class ProductsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  skip_before_action :authenticate_user!, only: %i[index show search]
   before_action :set_product, only: %i[show edit update destroy]
   before_action :authorize_product, only: %i[edit update destroy]
   before_action :initialize_cart, only: %i[index show]
 
   def index
-    @products = Product.all_products(params[:query]).page(params[:page]).per(6)
+    @products = Product.all.page(params[:page]).per(6)
+  end
+
+  def search
+    return if params[:key].blank?
+
+    @products = Product.search(params[:key])
+    respond_to do |format|
+      format.json { render json: @products }
+    end
   end
 
   def show

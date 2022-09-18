@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  before_action :authenticate_user!, only: %i[create edit update destroy]
   before_action :set_product, only: %i[create edit update destroy]
   before_action :set_comment, only: %i[edit update destroy]
   before_action :aurthorize_comment, only: %i[edit update destroy]
@@ -37,7 +36,7 @@ class CommentsController < ApplicationController
   end
 
   def set_comment
-    @comment = @product.comments.find(params[:id])
+    @comment = Comment.find(params[:id])
   end
 
   def aurthorize_comment

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CartsController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[show]
+
   def show
     if user_signed_in?
       SalelineItem.map_products_to_signed_in_user(current_user.id)
