@@ -1,12 +1,12 @@
 paypal.Buttons({
   env: 'sandbox',
   createOrder: async () => {
-    const response = await fetch('/create', {method: 'POST'});
+    const response = await fetch('order/new', {method: 'GET'});
     const responseData = await response.json();
     return responseData.token;
   },
   onApprove: async (data) => {
-    const response = await fetch('/capture_order', {
+    const response = await fetch('/order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

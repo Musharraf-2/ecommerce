@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
     @old_price = params[:old_price]
     @product = params[:product]
     attachments['product.jpeg'] = @product.images[0].download
-    mail(to: @email, subject: 'Price changed for a product in your wishlist!')
+    mail(to: @email, subject: I18n.t('mailer.price_changed'))
   end
 
   def sold_product_email

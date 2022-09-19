@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class WishlistsController < ApplicationController
-  before_action :authenticate_user!, only: %i[show update destroy]
   before_action :find_wishlist_product, only: %i[update destroy]
 
   def show
@@ -9,12 +8,7 @@ class WishlistsController < ApplicationController
   end
 
   def update
-    if !@wishlist_product
-      WishlistProduct.create(user_id: current_user.id, product_id: params[:id])
-      redirect_to request.referer, notice: I18n.t('wishlist.product_added')
-    else
-      redirect_to request.referer, alert: I18n.t('wishlist.product_exists')
-    end
+    WishlistProduct.create(user_id: current_user.id, product_id: params[:id]) unless @wishlist_product
   end
 
   def destroy

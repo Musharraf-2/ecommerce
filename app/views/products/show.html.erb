@@ -15,7 +15,15 @@
       <% else %>
         <p class="text-danger m-2">Currently out of stock.</p>
       <% end %>
-       <%= button_to 'Add to Wishlist', wishlist_path(id: @product.id), method: :put, class: "btn-secondary p-2 rounded mx-2" %>
+      <div class="wishlist-btn">
+        <% if user_signed_in? %>
+          <% if wishlist_products_exists(@product.id, current_user.id) %>
+            <p class="text-success m-2 wishlist-text">This product is in your wishlist.</p>
+          <% else %>
+            <%= button_to 'Add to Wishlist', wishlist_path(id: @product.id), method: :put, remote: :true,  class: "btn-secondary p-2 rounded mx-2" %>
+          <% end %>
+        <% end %>
+      </div>
       <% end %>
   </div>
   <br>
@@ -52,6 +60,9 @@
       <%= render 'comments/form' %>
     <% end %>
   <% end %>
+</div>
+<br>
+<div class="container comment-errors text-danger text-center">
 </div>
 <br>
 <div class="comments container border p-2">

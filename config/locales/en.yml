@@ -43,3 +43,5 @@ en:
   wishlist:
     product_added:  'Product added to wishlist.'
     product_exists: 'Product already in wishlist.'
+  mailer:
+    price_changed: 'Price changed for a product in your wishlist!'

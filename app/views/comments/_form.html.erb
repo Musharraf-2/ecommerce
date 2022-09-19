@@ -8,5 +8,7 @@
       <%= f.submit nil, class: "btn-primary p-2 rounded", id: "comment_body" %>
     </div>
   <% end %>
+  <div class="errors text-danger">
+  </div>
   <%= render "shared/error", object: @comment %>
 </div>
