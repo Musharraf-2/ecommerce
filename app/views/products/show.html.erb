@@ -5,26 +5,10 @@
   <strong>Quantity: </strong><%= @product.quantity %><br>
   <strong>Serial Number: </strong><%= @product.serial_number %><br>
   <div class="d-flex flex-row justify-content-center">
-    <% if (user_signed_in? && current_user.id != @product.user_id) || (!user_signed_in?) %>
-      <% if @product.quantity > 0%>
-        <% if session[:cart].include? @product.id %>
-          <%= button_to 'Remove from Cart', saleline_item_path(id: @product.id), method: :delete, class: "btn-danger p-2 rounded mx-2" %>
-        <% else %>
-          <%= button_to 'Add to Cart', saleline_item_path(id: @product.id), method: :create, class: "btn-primary p-2 rounded mx-2" %>
-        <% end %>
-      <% else %>
-        <p class="text-danger m-2">Currently out of stock.</p>
-      <% end %>
-      <div class="wishlist-btn">
-        <% if user_signed_in? %>
-          <% if wishlist_products_exists(@product.id, current_user.id) %>
-            <p class="text-success m-2 wishlist-text">This product is in your wishlist.</p>
-          <% else %>
-            <%= button_to 'Add to Wishlist', wishlist_path(id: @product.id), method: :put, remote: :true,  class: "btn-secondary p-2 rounded mx-2" %>
-          <% end %>
-        <% end %>
-      </div>
-      <% end %>
+    <%= show_product_buy_button(current_user, @product, session[:cart]) %>
+    <div class="wishlist-btn">
+      <%= show_wishlist_button(current_user, @product) %>
+    </div>
   </div>
   <br>
   <div class="row justify-content-center">
