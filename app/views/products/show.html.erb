@@ -1,0 +1,54 @@
+<div class="container">
+  <h1 class="text-center"><%= @product.title %></h1>
+  <strong>Description: </strong><%= @product.description %><br>
+  <strong>Price: </strong><%= @product.price %> $<br>
+  <strong>Quantity: </strong><%= @product.quantity %><br>
+  <strong>Serial Number: </strong><%= @product.serial_number %><br>
+  <div class="d-flex flex-row justify-content-center">
+    <%= show_product_buy_button(current_user, @product, session[:cart]) %>
+    <div class="wishlist-btn">
+      <%= show_wishlist_button(current_user, @product) %>
+    </div>
+  </div>
+  <br>
+  <div class="row justify-content-center">
+  <div class="col-4">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner text-center h-50">
+      <div class="carousel-item active">
+        <%= image_tag @product.images[0], class: "d-block w-100 c-image" %>
+      </div>
+      <% @product.images.each do |image| %>
+        <div class="carousel-item">
+          <%= image_tag image, class: "d-block w-100 c-image" %>
+        </div>
+      <% end %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  </div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <h1 class="text-center">Comments</h1>
+  <% if user_signed_in? %>
+    <% if @product.user_id != current_user.id %>
+      <%= render 'comments/form' %>
+    <% end %>
+  <% end %>
+</div>
+<br>
+<div class="container comment-errors text-danger text-center">
+</div>
+<br>
+<div class="comments container border p-2">
+    <%= render @product.comments %>
+</div>

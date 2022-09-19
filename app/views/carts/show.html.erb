@@ -1,0 +1,12 @@
+<div class="container border p-2">
+  <h1 class="text-center">Cart</h1>
+  <hr>
+  <%= render 'saleline_items/saleline_items_cart', saleline_items: @saleline_items %>
+  <br>
+  <% if session[:cart].any? %>
+    <div class="text-center">
+      <%= button_to 'Proceed to Checkout', order_path, class: "btn-warning p-2 rounded", method: :get %>
+    </div>
+  <% end %>
+  <br>
+</div>

@@ -1,0 +1,9 @@
+$(".comment-errors").empty()
+$("#comment_body").val("")
+<% if @comment.errors.any? %>
+  <% @comment.errors.full_messages.each do |msg| %>
+    $(".comment-errors").append("<%= msg %><br>");
+  <% end %>
+<% else %>
+  $(".comments").prepend("<%= j(render(@comment)) %>");
+<% end %>

@@ -1,0 +1,7 @@
+ <% @saleline_items.each do |saleline_item| %>
+      <tr>
+        <td><%= saleline_item.title %></td>
+        <td><%= saleline_item.quantity %></td>
+        <td><%= saleline_item.price * saleline_item.quantity %>$</td>
+    </tr>
+    <% end %>

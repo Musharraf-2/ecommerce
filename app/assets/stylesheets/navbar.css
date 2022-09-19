@@ -1,0 +1,10 @@
+.profile-picture {
+  height: 40px;
+  width: 40px;
+}
+#search {
+  position: absolute;
+  width: 275px;
+  height: 150px;
+  overflow: scroll;
+}

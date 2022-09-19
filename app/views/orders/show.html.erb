@@ -1,0 +1,21 @@
+<div class="container">
+  <h1 class="text-center">Order Details</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+      <%= render 'saleline_items/saleline_items' %>
+  </table>
+  <% if !Order.exists?(user_id: current_user.id) %>
+    <h4 class="text-center text-success">You are getting 10% discount for your first order.<h4>
+  <% end %>
+  <h4 class="text-center"> Your amount now payable is: <%= @total_amount %> $</h4>
+  <br>
+  <% if @saleline_items.any? %>
+    <div id="paypal-button-container" class="text-center"></div>
+  <% end %>
+</div>

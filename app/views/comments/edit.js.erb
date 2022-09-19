@@ -1,0 +1,7 @@
+$(".errors").empty()
+<% if @comment.errors.any? %>
+  <% @comment.errors.full_messages.each do |msg| %>
+    $(".errors").append("<%= msg %><br>");
+  <% end %>
+<% end %>
+
