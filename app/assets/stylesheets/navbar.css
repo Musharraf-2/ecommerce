@@ -4,6 +4,7 @@
 }
 #search {
   position: absolute;
-  height: 180px;
+  width: 275px;
+  height: 150px;
   overflow: scroll;
 }
