@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ProductsController, type: :controller do
-  let!(:user) { create(:user) }
+  let(:user) { create(:user) }
   let!(:product) { user.products.create(attributes_for(:product)) }
 
   context 'callbacks' do
@@ -64,10 +64,6 @@ RSpec.describe ProductsController, type: :controller do
     context 'product does not exists' do
       before do
         get :show, params: { id: 1000 }
-        get :index
-      end
-      it 'expected to render index template' do
-        expect(response).to render_template('index')
       end
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('The record you are asking does not exists.')
@@ -163,10 +159,6 @@ RSpec.describe ProductsController, type: :controller do
       context 'product does not exists' do
         before do
           get :edit, params: { id: 2000 }
-          get :index
-        end
-        it 'expected to render index template' do
-          expect(response).to render_template('index')
         end
         it 'expected to show flash message' do
           expect(flash[:alert]).to eq('The record you are asking does not exists.')
@@ -241,10 +233,6 @@ RSpec.describe ProductsController, type: :controller do
       context 'product does not exists' do
         before do
           delete :destroy, params: { id: 2000 }
-          get :index
-        end
-        it 'expected to render index template' do
-          expect(response).to render_template('index')
         end
         it 'expected to show flash message' do
           expect(flash[:alert]).to eq('The record you are asking does not exists.')
@@ -256,7 +244,7 @@ RSpec.describe ProductsController, type: :controller do
   describe '#update' do
     context 'user not signed in' do
       before do
-        patch :update, params: { product: attributes_for(:product), id: product.id }
+        patch :update, params: { product: product, id: product.id }
       end
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
@@ -268,7 +256,8 @@ RSpec.describe ProductsController, type: :controller do
       end
       context 'valid product' do
         before do
-          patch :update, params: { product: attributes_for(:product), id: product.id }
+          product1 = attributes_for(:product)
+          patch :update, params: { product: product1, id: product.id }
         end
         it 'expected to assign values to product' do
           expect(assigns(:product)).not_to eq nil

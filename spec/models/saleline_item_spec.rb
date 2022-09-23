@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe SalelineItem, type: :model do
   let!(:saleline_item) { create(:saleline_item) }
+  let!(:user) { create(:user, id: 1) }
+  let(:saleline_item1) { create(:saleline_item, user_id: 1, quantity: 10, price: 10) }
+  let(:saleline_item2) { create(:saleline_item, user_id: 2, quantity: 10, price: 10) }
+  let!(:order) { create(:order, user_id: 1) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:title).of_type(:string).with_options(null: false) }
@@ -65,21 +69,13 @@ RSpec.describe SalelineItem, type: :model do
   describe '.calculate_total_amount' do
     context 'order for user exists' do
       it 'expected to return total' do
-        user = create(:user)
-        saleline_item1 = create(:saleline_item, user_id: user.id, price: 10, quantity: 10)
-        saleline_item2 = create(:saleline_item, user_id: user.id, price: 10, quantity: 10)
-        create(:order, user_id: user.id)
-        total = (saleline_item1.price * saleline_item1.quantity) + (saleline_item2.price * saleline_item2.quantity)
-        expect(SalelineItem.calculate_total_amount(user.id)).to eq(total)
+        total = saleline_item1.price * saleline_item1.quantity
+        expect(SalelineItem.calculate_total_amount(1)).to eq(total)
       end
     end
     context 'order for user does not exists' do
       it 'expected to return total' do
-        user = create(:user)
-        saleline_item1 = create(:saleline_item, user_id: 2, price: 10, quantity: 10)
-        saleline_item2 = create(:saleline_item, user_id: 2, price: 10, quantity: 10)
-        create(:order, user_id: user.id)
-        total = (saleline_item1.price * saleline_item1.quantity) + (saleline_item2.price * saleline_item2.quantity)
+        total = saleline_item2.price * saleline_item2.quantity
         total -= (total * 0.1)
         expect(SalelineItem.calculate_total_amount(2)).to eq(total)
       end

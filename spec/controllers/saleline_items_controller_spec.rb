@@ -24,6 +24,9 @@ RSpec.describe SalelineItemsController, type: :controller do
       it 'expected to create saleline item' do
         expect(SalelineItem.last.quantity).to eq(1)
       end
+      it 'expected to increase saleline item count' do
+        expect(change(SalelineItem, :count).by(1))
+      end
       it 'expected session[:cart] to include product id' do
         expect(session[:cart]).to include(product.id)
       end
