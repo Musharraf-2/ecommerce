@@ -33,6 +33,7 @@ RSpec.describe Product, type: :model do
     it 'title valid' do
       expect(product).to be_valid
     end
+
     it 'title invalid' do
       product.title = nil
       expect(product).not_to be_valid
@@ -43,6 +44,7 @@ RSpec.describe Product, type: :model do
     it 'description valid' do
       expect(product).to be_valid
     end
+
     it 'description invalid' do
       product.description = nil
       expect(product).not_to be_valid
@@ -53,6 +55,7 @@ RSpec.describe Product, type: :model do
     it 'price valid' do
       expect(product).to be_valid
     end
+
     it 'price invalid' do
       product.price = nil
       expect(product).not_to be_valid
@@ -63,6 +66,7 @@ RSpec.describe Product, type: :model do
     it 'quantity valid' do
       expect(product).to be_valid
     end
+
     it 'quantity invalid' do
       product.quantity = nil
       expect(product).not_to be_valid
@@ -73,6 +77,7 @@ RSpec.describe Product, type: :model do
     it 'expected different old and new price' do
       expect(product.send_emails(999)).not_to eq(product.price)
     end
+
     let!(:wishlist_product) { create(:wishlist_product, user_id: user.id, product_id: product.id) }
     it 'expected to return users emails' do
       expect(User.users_for_email(product.id).pluck(:email)).to include(user.email)

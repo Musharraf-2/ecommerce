@@ -26,6 +26,7 @@ RSpec.describe Order, type: :model do
     it 'token valid' do
       expect(order).to be_valid
     end
+
     it 'token invalid' do
       order.token = nil
       expect(order).not_to be_valid
@@ -36,6 +37,7 @@ RSpec.describe Order, type: :model do
     it 'amount valid' do
       expect(order).to be_valid
     end
+
     it 'amount invalid' do
       order.amount = nil
       expect(order).not_to be_valid
@@ -45,6 +47,7 @@ RSpec.describe Order, type: :model do
     it 'paid_status valid' do
       expect(order).to be_valid
     end
+
     it 'paid_status invalid' do
       order.paid_status = nil
       expect(order).not_to be_valid

@@ -29,9 +29,11 @@ RSpec.describe ProductsController, type: :controller do
     before do
       get :index
     end
+
     it 'expected to have status 200' do
       expect(response).to have_http_status(200)
     end
+
     it 'expected to render index template' do
       expect(response).to render_template('index')
     end
@@ -41,9 +43,11 @@ RSpec.describe ProductsController, type: :controller do
     before do
       get :search, xhr: true, format: :json, params: { key: product.title }
     end
+
     it 'expected to have status 200' do
       expect(response).to have_http_status(200)
     end
+
     it 'expected to respond in json' do
       expect(JSON.parse(response.body)[0]['title']).to eq(product.title)
     end
@@ -54,17 +58,21 @@ RSpec.describe ProductsController, type: :controller do
       before do
         get :show, params: { id: product.id }
       end
+
       it 'expected to have status 200' do
         expect(response).to have_http_status(200)
       end
+
       it 'expected to render show template' do
         expect(response).to render_template('show')
       end
     end
+
     context 'product does not exists' do
       before do
         get :show, params: { id: 1000 }
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('The record you are asking does not exists.')
       end
@@ -77,17 +85,21 @@ RSpec.describe ProductsController, type: :controller do
         login_user(user)
         get :new
       end
+
       it 'expected to have status 200' do
         expect(response).to have_http_status(200)
       end
+
       it 'expected to render new template' do
         expect(response).to render_template('new')
       end
     end
+
     context 'user not signed in' do
       before do
         get :new
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
@@ -99,6 +111,7 @@ RSpec.describe ProductsController, type: :controller do
       before do
         post :create
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
@@ -107,24 +120,30 @@ RSpec.describe ProductsController, type: :controller do
       before do
         login_user(user)
       end
+
       context 'valid product' do
         before do
           post :create, params: { product: attributes_for(:product) }
         end
+
         it 'expected to assign values to product' do
           expect(assigns(:product)).not_to eq nil
         end
+
         it 'expected to redirect to product dashboard page' do
           expect(response).to redirect_to(dashboard_products_path)
         end
+
         it 'expected to show flash message' do
           expect(flash[:notice]).to eq('Product created successfully.')
         end
       end
+
       context 'invalid product' do
         before do
           post :create, params: { product: { title: nil } }
         end
+
         it 'expected to render new template' do
           expect(response).to render_template('new')
         end
@@ -137,29 +156,36 @@ RSpec.describe ProductsController, type: :controller do
       before do
         get :edit, params: { id: product.id }
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
     end
+
     context 'user signed in' do
       before do
         login_user(user)
       end
+
       context 'product exists' do
         before do
           get :edit, params: { id: product.id }
         end
+
         it 'expected to have status 200' do
           expect(response).to have_http_status(200)
         end
+
         it 'expected to render edit template' do
           expect(response).to render_template('edit')
         end
       end
+
       context 'product does not exists' do
         before do
           get :edit, params: { id: 2000 }
         end
+
         it 'expected to show flash message' do
           expect(flash[:alert]).to eq('The record you are asking does not exists.')
         end
@@ -172,18 +198,22 @@ RSpec.describe ProductsController, type: :controller do
       before do
         get :dashboard
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
     end
+
     context 'user signed in' do
       before do
         login_user(user)
         get :dashboard
       end
+
       it 'expected to have status 200' do
         expect(response).to have_http_status(200)
       end
+
       it 'expected to render dashboard template' do
         expect(response).to render_template('dashboard')
       end
@@ -195,10 +225,12 @@ RSpec.describe ProductsController, type: :controller do
       before do
         delete :destroy, params: { id: product.id }
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
     end
+
     context 'user signed in' do
       before do
         login_user(user)
@@ -206,6 +238,7 @@ RSpec.describe ProductsController, type: :controller do
         session[:cart] << product.id
         get :dashboard
       end
+
       context 'product exists' do
         context 'delete product' do
           it 'expected to delete product' do
@@ -214,10 +247,12 @@ RSpec.describe ProductsController, type: :controller do
                      params: { id: product.id }
             end.to change(Product, :count).by(-1)
           end
+
           it 'expected to render dashboard template' do
             expect(response).to render_template('dashboard')
           end
         end
+
         context 'cannot delete product' do
           it 'expected not to delete product' do
             allow_any_instance_of(Product).to receive(:destroy).and_return(false)
@@ -225,15 +260,18 @@ RSpec.describe ProductsController, type: :controller do
               delete :destroy, params: { id: product.id }
             end.to change(Product, :count).by(0)
           end
+
           it 'expected to render dashboard template' do
             expect(response).to render_template('dashboard')
           end
         end
       end
+
       context 'product does not exists' do
         before do
           delete :destroy, params: { id: 2000 }
         end
+
         it 'expected to show flash message' do
           expect(flash[:alert]).to eq('The record you are asking does not exists.')
         end

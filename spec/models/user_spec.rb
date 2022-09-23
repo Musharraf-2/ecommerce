@@ -27,6 +27,7 @@ RSpec.describe User, type: :model do
     it 'email valid' do
       expect(user).to be_valid
     end
+
     it 'email invalid' do
       user.email = nil
       expect(user).not_to be_valid
@@ -37,6 +38,7 @@ RSpec.describe User, type: :model do
     it 'password valid' do
       expect(user).to be_valid
     end
+
     it 'password invalid' do
       user.password = nil
       expect(user).not_to be_valid
@@ -49,6 +51,7 @@ RSpec.describe User, type: :model do
     it 'expected to return users for email' do
       expect(User.users_for_email(product.id)).to include(user)
     end
+
     it 'expected to return no users for email' do
       expect(User.users_for_email(5)).not_to include(user)
     end

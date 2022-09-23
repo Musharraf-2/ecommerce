@@ -26,6 +26,7 @@ RSpec.describe OrderedProduct, type: :model do
     it 'title valid' do
       expect(ordered_product).to be_valid
     end
+
     it 'title invalid' do
       ordered_product.title = nil
       expect(ordered_product).not_to be_valid
@@ -36,6 +37,7 @@ RSpec.describe OrderedProduct, type: :model do
     it 'price valid' do
       expect(ordered_product).to be_valid
     end
+
     it 'price invalid' do
       ordered_product.price = nil
       expect(ordered_product).not_to be_valid
@@ -46,6 +48,7 @@ RSpec.describe OrderedProduct, type: :model do
     it 'quantity valid' do
       expect(ordered_product).to be_valid
     end
+
     it 'quantity invalid' do
       ordered_product.quantity = nil
       expect(ordered_product).not_to be_valid

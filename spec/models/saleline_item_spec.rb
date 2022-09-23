@@ -23,6 +23,7 @@ RSpec.describe SalelineItem, type: :model do
     it 'title valid' do
       expect(saleline_item).to be_valid
     end
+
     it 'title invalid' do
       saleline_item.title = nil
       expect(saleline_item).not_to be_valid
@@ -33,6 +34,7 @@ RSpec.describe SalelineItem, type: :model do
     it 'price valid' do
       expect(saleline_item).to be_valid
     end
+
     it 'price invalid' do
       saleline_item.price = nil
       expect(saleline_item).not_to be_valid
@@ -43,6 +45,7 @@ RSpec.describe SalelineItem, type: :model do
     it 'quantity valid' do
       expect(saleline_item).to be_valid
     end
+
     it 'quantity invalid' do
       saleline_item.quantity = nil
       expect(saleline_item).not_to be_valid
@@ -73,6 +76,7 @@ RSpec.describe SalelineItem, type: :model do
         expect(SalelineItem.calculate_total_amount(1)).to eq(total)
       end
     end
+
     context 'order for user does not exists' do
       it 'expected to return total' do
         total = saleline_item2.price * saleline_item2.quantity

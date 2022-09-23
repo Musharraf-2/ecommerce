@@ -27,6 +27,7 @@ RSpec.describe Comment, type: :model do
     it 'expected comment to be valid' do
       expect(comment).to be_valid
     end
+
     it 'expected comment not to be valid' do
       comment.body = nil
       expect(comment).not_to be_valid
