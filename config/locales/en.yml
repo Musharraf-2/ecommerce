@@ -36,7 +36,7 @@ en:
   product:
     created: 'Product created successfully.'
     creation_failed: 'Product creation failed.'
-    update: Product updated successfully.'
+    update: 'Product updated successfully.'
     update_failed: 'Product update failed.'
   saleline_item:
     quantity_updated: 'Quantity updated successfully.'
