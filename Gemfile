@@ -68,6 +68,7 @@ group :test do
   gem 'database_cleaner'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'shoulda-matchers', '~> 5.0'
+  gem 'simplecov', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -79,5 +80,4 @@ gem 'kaminari'
 gem 'paypal-checkout-sdk'
 gem 'pundit'
 gem 'rails-controller-testing'
-gem 'simplecov', require: false, group: :test
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
