@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Product, type: :model do
   let(:user) { create(:user) }
   subject(:product) { create(:product, user_id: user.id) }
+  subject(:product1) { create(:product, user_id: user.id) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:title).of_type(:string).with_options(null: false) }
@@ -87,6 +88,39 @@ RSpec.describe Product, type: :model do
         expect(product).not_to be_valid
       end
     end
+
+    context 'valid images' do
+      it 'expected images type to be jpeg' do
+        expect(product.images[0].blob.content_type).to eq('image/jpeg')
+      end
+      it 'expected images type to be png' do
+        expect(product.images[1].blob.content_type).to eq('image/png')
+      end
+    end
+
+    context 'invalid images' do
+      it 'expected images type not to be png or jpeg' do
+        expect do
+          create(:product,
+                 images: [Rack::Test::UploadedFile.new('app/assets/images/car.webp', 'product.webp')])
+        end.to raise_exception(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    # context 'valid serial_number' do
+    #   it { is_expected.to validate_presence_of(:serial_number) }
+    #   it { is_expected.to validate_uniqueness_of(:serial_number).ignoring_case_sensitivity }
+    #   it 'expected serial_number to be valid' do
+    #     expect(product).to be_valid
+    #   end
+    # end
+
+    # context 'invalid serial_number' do
+    #   it 'expected serial_number to be invalid' do
+    #     product.serial_number = nil
+    #     expect(product).not_to be_valid
+    #   end
+    # end
   end
 
   describe '.send_emails' do
@@ -131,6 +165,14 @@ RSpec.describe Product, type: :model do
             product.send_emails(product.price)
           end.not_to have_enqueued_mail(UserMailer, :price_changed_email)
         end
+      end
+    end
+  end
+
+  describe '.generate_unique_serial_number' do
+    context 'unique serial number for both products' do
+      it 'expected that serial number will not be same' do
+        expect(product.serial_number).not_to eq(product1.serial_number)
       end
     end
   end

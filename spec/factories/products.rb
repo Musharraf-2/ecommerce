@@ -7,7 +7,10 @@ FactoryBot.define do
     price { Faker::Number.between(from: 1, to: 99_999) }
     quantity { Faker::Number.between(from: 0, to: 500) }
     serial_number { Faker::Crypto.md5 }
-    images { [Rack::Test::UploadedFile.new('app/assets/images/car.jpeg', 'product.jpeg')] }
+    images do
+      [Rack::Test::UploadedFile.new('app/assets/images/car.jpeg', 'product.jpeg'),
+       Rack::Test::UploadedFile.new('app/assets/images/car.png', 'product.png')]
+    end
     user
   end
 end

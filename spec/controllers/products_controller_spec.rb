@@ -54,16 +54,32 @@ RSpec.describe ProductsController, type: :controller do
   end
 
   describe '#search' do
-    before do
-      get :search, xhr: true, format: :json, params: { key: product.title }
+    context 'full product name in search bar' do
+      before do
+        get :search, xhr: true, format: :json, params: { key: product.title }
+      end
+
+      it 'expected to have status 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'expected to respond in json' do
+        expect(JSON.parse(response.body)[0]['title']).to eq(product.title)
+      end
     end
 
-    it 'expected to have status 200' do
-      expect(response).to have_http_status(200)
-    end
+    context 'partial product name in search bar' do
+      before do
+        get :search, xhr: true, format: :json, params: { key: product.title[0] }
+      end
 
-    it 'expected to respond in json' do
-      expect(JSON.parse(response.body)[0]['title']).to eq(product.title)
+      it 'expected to have status 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'expected to respond in json' do
+        expect(JSON.parse(response.body)[0]['title']).to match(/#{product.title[0]}/i)
+      end
     end
   end
 
@@ -166,6 +182,13 @@ RSpec.describe ProductsController, type: :controller do
         it 'expected to show flash message' do
           expect(flash[:notice]).to eq('Product created successfully.')
         end
+
+        it 'expected to create product' do
+          expect do
+            post :create,
+                 params: { product: attributes_for(:product) }
+          end.to change(Product, :count).by(1)
+        end
       end
 
       context 'invalid product' do
@@ -173,8 +196,19 @@ RSpec.describe ProductsController, type: :controller do
           post :create, params: { product: { title: nil } }
         end
 
+        it 'expected not to create product' do
+          expect do
+            post :create,
+                 params: { product: { title: nil } }
+          end.to change(Product, :count).by(0)
+        end
+
         it 'expected to render new template' do
           expect(response).to render_template('new')
+        end
+
+        it 'expected to show flash message' do
+          expect(flash[:alert]).to eq('Product creation failed.')
         end
       end
     end
@@ -341,6 +375,7 @@ RSpec.describe ProductsController, type: :controller do
       before do
         patch :update, params: { product: product, id: product.id }
       end
+
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
@@ -353,8 +388,11 @@ RSpec.describe ProductsController, type: :controller do
 
       context 'valid product' do
         before do
-          product1 = attributes_for(:product)
-          patch :update, params: { product: product1, id: product.id }
+          patch :update, params: { product: { title: 'new title' }, id: product.id }
+        end
+
+        it 'expected product to be updated' do
+          expect(product.reload.title).to eq('new title')
         end
 
         it 'expected to assign values to product' do
@@ -372,11 +410,18 @@ RSpec.describe ProductsController, type: :controller do
       context 'invalid product' do
         before do
           patch :update, params: { product: { title: nil }, id: product.id }
-          get :edit, params: { id: product.id }
+        end
+
+        it 'expected not to update product' do
+          expect(product.title).not_to eq(nil)
         end
 
         it 'expected to render edit template' do
           expect(response).to render_template('edit')
+        end
+
+        it 'expected to show flash message' do
+          expect(flash[:alert]).to eq('Product update failed.')
         end
       end
     end

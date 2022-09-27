@@ -34,7 +34,8 @@ class ProductsController < ApplicationController
     if @product.save
       redirect_to dashboard_products_path, notice: I18n.t('product.created')
     else
-      render :new, alert: I18n.t('product.creation_failed')
+      flash.now[:alert] = I18n.t('product.creation_failed')
+      render :new
     end
   end
 
@@ -44,7 +45,8 @@ class ProductsController < ApplicationController
       @product.send_emails(@old_price)
       redirect_to dashboard_products_path, notice: I18n.t('product.update')
     else
-      render :edit, alert: I18n.t('product.update_failed')
+      flash.now[:alert] = I18n.t('product.update_failed')
+      render :edit
     end
   end
 
