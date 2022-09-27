@@ -93,6 +93,7 @@ RSpec.describe Product, type: :model do
       it 'expected images type to be jpeg' do
         expect(product.images[0].blob.content_type).to eq('image/jpeg')
       end
+
       it 'expected images type to be png' do
         expect(product.images[1].blob.content_type).to eq('image/png')
       end
@@ -107,20 +108,24 @@ RSpec.describe Product, type: :model do
       end
     end
 
-    # context 'valid serial_number' do
-    #   it { is_expected.to validate_presence_of(:serial_number) }
-    #   it { is_expected.to validate_uniqueness_of(:serial_number).ignoring_case_sensitivity }
-    #   it 'expected serial_number to be valid' do
-    #     expect(product).to be_valid
-    #   end
-    # end
+    context 'valid serial_number' do
+      before do
+        Product.skip_callback(:validation, :before, :generate_unique_serial_number, raise: false)
+      end
 
-    # context 'invalid serial_number' do
-    #   it 'expected serial_number to be invalid' do
-    #     product.serial_number = nil
-    #     expect(product).not_to be_valid
-    #   end
-    # end
+      it { is_expected.to validate_presence_of(:serial_number) }
+      it { is_expected.to validate_uniqueness_of(:serial_number).ignoring_case_sensitivity }
+      it 'expected serial_number to be valid' do
+        expect(product1).to be_valid
+      end
+    end
+
+    context 'invalid serial_number' do
+      it 'expected serial_number to be invalid' do
+        product.serial_number = nil
+        expect(product).not_to be_valid
+      end
+    end
   end
 
   describe '.send_emails' do

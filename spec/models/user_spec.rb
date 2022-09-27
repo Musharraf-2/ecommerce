@@ -58,6 +58,7 @@ RSpec.describe User, type: :model do
     before do
       create(:wishlist_product, user_id: subject.id, product_id: product.id)
     end
+
     context 'get all users for email' do
       it 'expected to return users for email' do
         expect(described_class.users_for_email(product.id)).to include(user)

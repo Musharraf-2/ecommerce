@@ -69,6 +69,7 @@ RSpec.describe SalelineItem, type: :model do
       create(:product, user_id: user1.id)
       create(:saleline_item, user_id: user1.id)
     end
+
     context 'map salineitems to user' do
       it 'expected to map saleline items to user' do
         described_class.map_products_to_signed_in_user(user.id)
@@ -91,6 +92,7 @@ RSpec.describe SalelineItem, type: :model do
       before do
         create(:order, user_id: user.id)
       end
+
       it 'expected to return total' do
         total = saleline_item1.price * saleline_item1.quantity
         expect(described_class.calculate_total_amount(user.id)).to eq(total)
