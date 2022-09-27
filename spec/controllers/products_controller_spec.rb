@@ -37,6 +37,20 @@ RSpec.describe ProductsController, type: :controller do
     it 'expected to render index template' do
       expect(response).to render_template('index')
     end
+
+    context 'product is present in index page' do
+      render_views
+      it 'expected to contain product in index page' do
+        expect(response.body).to include(product.title)
+      end
+    end
+
+    context 'product is not present in index page' do
+      render_views
+      it 'expected not to contain product in index page' do
+        expect(response.body).not_to include('Some random product title')
+      end
+    end
   end
 
   describe '#search' do
@@ -66,6 +80,13 @@ RSpec.describe ProductsController, type: :controller do
       it 'expected to render show template' do
         expect(response).to render_template('show')
       end
+
+      context 'product is present in show page' do
+        render_views
+        it 'expected to contain product in show page' do
+          expect(response.body).to include(product.title)
+        end
+      end
     end
 
     context 'product does not exists' do
@@ -75,6 +96,13 @@ RSpec.describe ProductsController, type: :controller do
 
       it 'expected to show flash message' do
         expect(flash[:alert]).to eq('The record you are asking does not exists.')
+      end
+
+      context 'product is not present in show page' do
+        render_views
+        it 'expected not to contain product in show page' do
+          expect(response.body).not_to include(product.title)
+        end
       end
     end
   end
@@ -116,6 +144,7 @@ RSpec.describe ProductsController, type: :controller do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
     end
+
     context 'user signed in' do
       before do
         login_user(user)
@@ -179,6 +208,13 @@ RSpec.describe ProductsController, type: :controller do
         it 'expected to render edit template' do
           expect(response).to render_template('edit')
         end
+
+        context 'product is present in edit page' do
+          render_views
+          it 'expected to contain product in edit page' do
+            expect(response.body).to include(product.title)
+          end
+        end
       end
 
       context 'product does not exists' do
@@ -188,6 +224,13 @@ RSpec.describe ProductsController, type: :controller do
 
         it 'expected to show flash message' do
           expect(flash[:alert]).to eq('The record you are asking does not exists.')
+        end
+
+        context 'product is not present in edit page' do
+          render_views
+          it 'expected not to contain product in edit page' do
+            expect(response.body).not_to include(product.title)
+          end
         end
       end
     end
@@ -216,6 +259,20 @@ RSpec.describe ProductsController, type: :controller do
 
       it 'expected to render dashboard template' do
         expect(response).to render_template('dashboard')
+      end
+
+      context 'product is present in dashboard page' do
+        render_views
+        it 'expected to contain product in dashboard page' do
+          expect(response.body).to include(product.title)
+        end
+      end
+
+      context 'product is not present in dashboard page' do
+        render_views
+        it 'expected not to contain product in dashboard page' do
+          expect(response.body).not_to include('Some random product title')
+        end
       end
     end
   end
@@ -288,18 +345,22 @@ RSpec.describe ProductsController, type: :controller do
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
       end
     end
+
     context 'user signed in' do
       before do
         login_user(user)
       end
+
       context 'valid product' do
         before do
           product1 = attributes_for(:product)
           patch :update, params: { product: product1, id: product.id }
         end
+
         it 'expected to assign values to product' do
           expect(assigns(:product)).not_to eq nil
         end
+
         it 'expected to redirect to product dashboard page' do
           expect(response).to redirect_to(dashboard_products_path)
         end
@@ -307,11 +368,13 @@ RSpec.describe ProductsController, type: :controller do
           expect(flash[:notice]).to eq('Product updated successfully.')
         end
       end
+
       context 'invalid product' do
         before do
           patch :update, params: { product: { title: nil }, id: product.id }
           get :edit, params: { id: product.id }
         end
+
         it 'expected to render edit template' do
           expect(response).to render_template('edit')
         end

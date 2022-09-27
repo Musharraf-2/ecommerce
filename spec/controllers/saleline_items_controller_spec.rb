@@ -6,6 +6,7 @@ RSpec.describe SalelineItemsController, type: :controller do
   let!(:user) { create(:user) }
   let!(:product) { create(:product) }
   let!(:saleline_item) { create(:saleline_item, product_id: product.id) }
+
   context 'routes' do
     it { is_expected.to route(:post, '/saleline_item').to(action: :create) }
     it { is_expected.to route(:put, '/saleline_item').to(action: :update) }
@@ -47,16 +48,18 @@ RSpec.describe SalelineItemsController, type: :controller do
       patch :update, params: { saleline_item: { quantity: 20, saleline_item_id: saleline_item.id } }
     end
 
-    it 'expected to update saleline item' do
-      expect(SalelineItem.last.quantity).to eq(20)
-    end
+    context 'saleline item is updated' do
+      it 'expected to update saleline item' do
+        expect(saleline_item.reload.quantity).to eq(20)
+      end
 
-    it 'expected to show flash message' do
-      expect(flash[:notice]).to eq('Quantity updated successfully.')
-    end
+      it 'expected to show flash message' do
+        expect(flash[:notice]).to eq('Quantity updated successfully.')
+      end
 
-    it 'expected to redirect request referer' do
-      expect(response).to redirect_to(request.referer)
+      it 'expected to redirect request referer' do
+        expect(response).to redirect_to(request.referer)
+      end
     end
   end
 

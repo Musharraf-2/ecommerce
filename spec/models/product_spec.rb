@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
-  let!(:user) { create(:user) }
-  let!(:product) { create(:product, user_id: user.id) }
+  let(:user) { create(:user) }
+  subject(:product) { create(:product, user_id: user.id) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:title).of_type(:string).with_options(null: false) }
@@ -28,59 +28,110 @@ RSpec.describe Product, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of(:title) }
-    it { is_expected.to validate_length_of(:title).is_at_least(2).is_at_most(40) }
-    it 'title valid' do
-      expect(product).to be_valid
+    context 'valid title' do
+      it { is_expected.to validate_presence_of(:title) }
+      it { is_expected.to validate_length_of(:title).is_at_least(2).is_at_most(40) }
+      it 'expected title to be valid' do
+        expect(product).to be_valid
+      end
     end
 
-    it 'title invalid' do
-      product.title = nil
-      expect(product).not_to be_valid
+    context 'invalid title' do
+      it 'expected title to be invalid' do
+        product.title = nil
+        expect(product).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_presence_of(:description) }
-    it { is_expected.to validate_length_of(:description).is_at_least(5).is_at_most(500) }
-    it 'description valid' do
-      expect(product).to be_valid
+    context 'valid description' do
+      it { is_expected.to validate_presence_of(:description) }
+      it { is_expected.to validate_length_of(:description).is_at_least(5).is_at_most(500) }
+      it 'expected description to be valid' do
+        expect(product).to be_valid
+      end
     end
 
-    it 'description invalid' do
-      product.description = nil
-      expect(product).not_to be_valid
+    context 'invalid description' do
+      it 'expected description to be invalid' do
+        product.description = nil
+        expect(product).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_presence_of(:price) }
-    it { is_expected.to validate_numericality_of(:price).is_greater_than(0).is_less_than(100_000) }
-    it 'price valid' do
-      expect(product).to be_valid
+    context 'valid price' do
+      it { is_expected.to validate_presence_of(:price) }
+      it { is_expected.to validate_numericality_of(:price).is_greater_than(0).is_less_than(100_000) }
+      it 'expected price to be valid' do
+        expect(product).to be_valid
+      end
     end
 
-    it 'price invalid' do
-      product.price = nil
-      expect(product).not_to be_valid
+    context 'invalid price' do
+      it 'expected price to be invalid' do
+        product.price = nil
+        expect(product).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_presence_of(:quantity) }
-    it { is_expected.to validate_numericality_of(:quantity).is_greater_than_or_equal_to(0).is_less_than(501) }
-    it 'quantity valid' do
-      expect(product).to be_valid
+    context 'valid quantity' do
+      it { is_expected.to validate_presence_of(:quantity) }
+      it { is_expected.to validate_numericality_of(:quantity).is_greater_than_or_equal_to(0).is_less_than(501) }
+      it 'expected price to valid' do
+        expect(product).to be_valid
+      end
     end
 
-    it 'quantity invalid' do
-      product.quantity = nil
-      expect(product).not_to be_valid
+    context 'invalid quantity' do
+      it 'expected price to valid' do
+        product.quantity = nil
+        expect(product).not_to be_valid
+      end
     end
   end
 
   describe '.send_emails' do
-    it 'expected different old and new price' do
-      expect(product.send_emails(999)).not_to eq(product.price)
+    before do
+      create(:wishlist_product, user_id: user.id, product_id: product.id)
     end
 
-    let!(:wishlist_product) { create(:wishlist_product, user_id: user.id, product_id: product.id) }
-    it 'expected to return users emails' do
-      expect(User.users_for_email(product.id).pluck(:email)).to include(user.email)
+    context 'old and  new price are different' do
+      context 'price changed' do
+        it 'expected different old and new price' do
+          expect(product.send_emails(999)).not_to eq(product.price)
+        end
+      end
+
+      context 'return users email' do
+        it 'expected to return users emails' do
+          expect(User.users_for_email(product.id).pluck(:email)).to include(user.email)
+        end
+      end
+
+      context 'queue emails' do
+        it 'expected to queue emails' do
+          ActiveJob::Base.queue_adapter = :test
+          expect do
+            product.send_emails(999)
+          end.to have_enqueued_mail(UserMailer, :price_changed_email)
+        end
+      end
+    end
+
+    context 'old and new price are same' do
+      context 'return no users email' do
+        it 'expected not to return users emails' do
+          expect(User.users_for_email(999).pluck(:email)).not_to include(user.email)
+        end
+      end
+
+      context 'do not queue emails' do
+        it 'expected not to queue emails' do
+          ActiveJob::Base.queue_adapter = :test
+          expect do
+            product.send_emails(product.price)
+          end.not_to have_enqueued_mail(UserMailer, :price_changed_email)
+        end
+      end
     end
   end
 end

@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let!(:user) { create(:user) }
+  subject(:user) { create(:user) }
+  let(:product) { create(:product, user_id: subject.id) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:email).of_type(:string).with_options(null: false, default: '') }
@@ -22,38 +23,51 @@ RSpec.describe User, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of(:email) }
-    it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
-    it 'email valid' do
-      expect(user).to be_valid
+    context 'valid email' do
+      it { is_expected.to validate_presence_of(:email) }
+      it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
+      it 'expected email to be valid' do
+        expect(user).to be_valid
+      end
     end
 
-    it 'email invalid' do
-      user.email = nil
-      expect(user).not_to be_valid
+    context 'invalid email' do
+      it 'expected email to be invalid' do
+        user.email = nil
+        expect(user).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_presence_of(:password) }
-    it { is_expected.to validate_length_of(:password).is_at_least(6) }
-    it 'password valid' do
-      expect(user).to be_valid
+    context 'valid password' do
+      it { is_expected.to validate_presence_of(:password) }
+      it { is_expected.to validate_length_of(:password).is_at_least(6) }
+      it 'expected password to be valid' do
+        expect(user).to be_valid
+      end
     end
 
-    it 'password invalid' do
-      user.password = nil
-      expect(user).not_to be_valid
+    context 'invalid password' do
+      it 'expected password to be invalid' do
+        user.password = nil
+        expect(user).not_to be_valid
+      end
     end
   end
 
   describe '.user_for_email' do
-    let!(:product) { create(:product, user_id: user.id) }
-    let!(:wishlist_product) { create(:wishlist_product, user_id: user.id, product_id: product.id) }
-    it 'expected to return users for email' do
-      expect(User.users_for_email(product.id)).to include(user)
+    before do
+      create(:wishlist_product, user_id: subject.id, product_id: product.id)
+    end
+    context 'get all users for email' do
+      it 'expected to return users for email' do
+        expect(described_class.users_for_email(product.id)).to include(user)
+      end
     end
 
-    it 'expected to return no users for email' do
-      expect(User.users_for_email(5)).not_to include(user)
+    context 'get no user for email' do
+      it 'expected to return no users for email' do
+        expect(described_class.users_for_email(5)).not_to include(user)
+      end
     end
   end
 end

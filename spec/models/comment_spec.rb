@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  let!(:comment) { create(:comment) }
+  subject(:comment) { create(:comment) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:body).of_type(:text).with_options(null: false) }
@@ -22,15 +22,19 @@ RSpec.describe Comment, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of(:body) }
-    it { is_expected.to validate_length_of(:body).is_at_least(5).is_at_most(500) }
-    it 'expected comment to be valid' do
-      expect(comment).to be_valid
+    context 'valid comment' do
+      it { is_expected.to validate_presence_of(:body) }
+      it { is_expected.to validate_length_of(:body).is_at_least(5).is_at_most(500) }
+      it 'expected comment to be valid' do
+        expect(comment).to be_valid
+      end
     end
 
-    it 'expected comment not to be valid' do
-      comment.body = nil
-      expect(comment).not_to be_valid
+    context 'invalid comment' do
+      it 'expected comment not to be valid' do
+        comment.body = nil
+        expect(comment).not_to be_valid
+      end
     end
   end
 end

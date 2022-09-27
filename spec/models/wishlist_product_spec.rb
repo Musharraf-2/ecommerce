@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WishlistProduct, type: :model do
-  let!(:wishlist_product) { create(:wishlist_product) }
+  subject(:wishlist_product) { create(:wishlist_product) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:user_id).of_type(:integer) }

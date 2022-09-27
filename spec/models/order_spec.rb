@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Order, type: :model do
-  let!(:order) { create(:order) }
+  subject(:order) { create(:order) }
 
   context 'database columns' do
     it { is_expected.to have_db_column(:paid_status).of_type(:boolean).with_options(default: false) }
@@ -22,35 +22,47 @@ RSpec.describe Order, type: :model do
   end
 
   context 'validations' do
-    it { is_expected.to validate_presence_of(:token) }
-    it 'token valid' do
-      expect(order).to be_valid
+    context 'valid token' do
+      it { is_expected.to validate_presence_of(:token) }
+      it 'expected token to be valid' do
+        expect(order).to be_valid
+      end
     end
 
-    it 'token invalid' do
-      order.token = nil
-      expect(order).not_to be_valid
+    context 'invalid token' do
+      it 'expected token to be invalid' do
+        order.token = nil
+        expect(order).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_presence_of(:amount) }
-    it { is_expected.to validate_numericality_of(:amount).is_greater_than(0) }
-    it 'amount valid' do
-      expect(order).to be_valid
+    context 'valid amount' do
+      it { is_expected.to validate_presence_of(:amount) }
+      it { is_expected.to validate_numericality_of(:amount).is_greater_than(0) }
+      it 'expected amount to be valid' do
+        expect(order).to be_valid
+      end
     end
 
-    it 'amount invalid' do
-      order.amount = nil
-      expect(order).not_to be_valid
+    context 'invalid amount' do
+      it 'expected amount to be invalid' do
+        order.amount = nil
+        expect(order).not_to be_valid
+      end
     end
 
-    it { is_expected.to validate_inclusion_of(:paid_status).in_array([true, false]) }
-    it 'paid_status valid' do
-      expect(order).to be_valid
+    context 'valid paid_status' do
+      it { is_expected.to validate_inclusion_of(:paid_status).in_array([true, false]) }
+      it 'expected paid_status to be valid' do
+        expect(order).to be_valid
+      end
     end
 
-    it 'paid_status invalid' do
-      order.paid_status = nil
-      expect(order).not_to be_valid
+    context 'valid paid_status' do
+      it 'expected paid_status to be invalid' do
+        order.paid_status = nil
+        expect(order).not_to be_valid
+      end
     end
   end
 end
