@@ -66,6 +66,7 @@ group :test do
   # Easy installation and use of chromedriver to run system tests with Chrome
   # gem 'chromedriver-helper'
   gem 'database_cleaner'
+  gem 'rails-controller-testing'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', require: false
@@ -79,5 +80,4 @@ gem 'faker'
 gem 'kaminari'
 gem 'paypal-checkout-sdk'
 gem 'pundit'
-gem 'rails-controller-testing'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

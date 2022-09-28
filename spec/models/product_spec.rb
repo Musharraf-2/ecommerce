@@ -28,6 +28,10 @@ RSpec.describe Product, type: :model do
     it { is_expected.to have_many_attached(:images) }
   end
 
+  context 'callbacks' do
+    it { is_expected.to callback(:generate_unique_serial_number).before(:validation) }
+  end
+
   context 'validations' do
     context 'valid title' do
       it { is_expected.to validate_presence_of(:title) }

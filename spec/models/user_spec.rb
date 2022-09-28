@@ -52,6 +52,21 @@ RSpec.describe User, type: :model do
         expect(user).not_to be_valid
       end
     end
+
+    context 'valid images' do
+      it 'expected images type to be png' do
+        expect(user.image.blob.content_type).to eq('image/png')
+      end
+    end
+
+    context 'invalid images' do
+      it 'expected images type not to be png or jpeg' do
+        expect do
+          create(:user,
+                 image: Rack::Test::UploadedFile.new('app/assets/images/car.webp', 'user.webp'))
+        end.to raise_exception(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe '.user_for_email' do
