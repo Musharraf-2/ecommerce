@@ -7,29 +7,10 @@ module Api
 
       def index
         @products = Product.all
-        render json: @products.map { |product|
-                       product.as_json.merge(
-                         image_spath: url_for(product.images[0])
-                       )
-                     }
       end
 
       def show
-        @product = Product.find(params[:id])
-        render json: @product.as_json.merge(
-          images_path: get_images_url(@product.images),
-          comments: @product.comments
-        )
-      end
-
-      private
-
-      def get_images_url(images)
-        images_url = []
-        images.each do |image|
-          images_url << url_for(image)
-        end
-        images_url
+        @product = Product.includes(:comments).find(params[:id])
       end
     end
   end
