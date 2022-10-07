@@ -5,6 +5,7 @@ json.product do
   json.title @product.title
   json.price @product.price
   json.quantity @product.quantity
+  json.description @product.description
   json.serial_number @product.serial_number
   json.comments @product.comments do |comment|
     json.id comment.id
